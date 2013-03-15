@@ -1,0 +1,124 @@
+@CHARSET "UTF-8";
+
+div.athlates-white-board{
+	float: right;
+}
+
+.athlates-white-board h1{
+	moz-user-select: none !important;
+    background: -moz-linear-gradient(center top , #FFFFFF 0%, #E0E0E0 100%) repeat scroll 0 0 transparent !important;
+    border: 1px solid #AAAAAA !important;
+    border-radius: 3px 3px 3px 3px !important;
+    color: #2F2F2F !important;
+    display: inline-block !important;
+    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    position: relative !important;
+    text-shadow: 0 1px 0 white !important;
+}
+
+.athlates-white-board h1{
+	cursor: pointer !important;
+    text-decoration: none !important;
+    float: right;
+}
+
+.athlates-white-board h1:hover{
+	border-color: #777777 !important;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 0 3px #FFFFFF inset !important;
+	
+}
+
+.whiteboard-window{
+	position:absolute;
+    height: 500px;
+    width: 300px;    
+    border: 4px solid black;    
+    border-radius: 3px 3px 3px 3px !important;
+  	z-index:10; 
+    background-color: #FFFFFF;
+    
+}
+
+.whiteboard-window-shown{
+	visibility: hidden;
+}
+
+.athlates-white-board-popup{
+	position: relative;
+	height: 20px;
+    width: 305px;
+    float: right;
+}
+
+.whiteboard-entry-row{
+	
+}
+
+.white-board-entry-add{
+	cursor: pointer !important;
+}
+
+.whiteboard-classes li{
+	display: inline;
+	padding-right: 30%;
+}
+
+.athlates-white-board td{
+	border: none;	
+}
+
+
+
+/* white level ajax css */
+.whiteboard-entries{
+ 	display: none; 
+}
+
+.althlates-new-entry{
+	display: none;
+}
+
+.whiteboard-class-row{
+	background: #1A1A1A;
+}
+
+td.whiteboard-class a{
+	color: #FFFFFF;
+	display: inline-block !important;
+    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+	padding-left: 10px;
+}
+
+td.whiteboard-class a:hover{
+	text-decoration: none;
+	cursor: pointer !important;
+}
+
+.althlates-new-entry td{
+	border-bottom: 1px solid #7F7F7F;
+	padding: 3px;
+}
+
+
+/*seelcted class*/
+.whiteboard-class-selected{
+	background-color: #FFFFFF;
+}
+/*seelcted class*/
+.whiteboard-class-selected a{
+	color: #1A1A1A !important;
+}
+
+
+/*if white bord is selected*/
+.popup-shown{
+	visibility: visible;
+}
