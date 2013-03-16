@@ -28,21 +28,25 @@
 								$class = "whiteboard-class";
 							}
 						?> 						
-						<td class="<?php echo $class;?>" id="<?php echo $data['class'] . '-' . $post->ID; ?>" ><a> <?php echo $data['class']; ?> </a></td> 
+						<td class="<?php echo $class;?>" id="<?php echo 'boardclass' . '-' . $post->ID . '-' . $key; ?>" ><a> <?php echo $data['class']; ?> </a></td> 
 						<?php endforeach; ?>
 					</tr>
 				</table>
 				<?php 
+				//athlates scroe showing
 					foreach ($board_data as $key => $data){
 						if($key == 0){
-							$class = "";
+							$class = "whiteboard-entry-table";
+						}
+						else{
+							$class= "whiteboard-entry-table whiteboard-entries";
 						}
 						?>
 						
-						<table class="whiteboard-entry-table whiteboard-entries" id="whiteboard-athlates-entries-<?php echo $data['class'] . '-' . $post->ID;?>">
+						<table class="<?php echo $class; ?>" id="whiteboard-newentry-<?php echo $post->ID . '-' . $key;?>">
 							<tr>
 								<td>Name</td>
-								<?php foreach($data['component'] as $key => $component) : ?>
+								<?php foreach($data['component'] as $k => $component) : ?>
 									<td> <?php echo $component['name'];?> </td>
 								<?php endforeach;?>
 							</tr>
@@ -73,8 +77,7 @@
 										<h4><?php echo $component['name'];?></h4>
 										<p><input type="text" placeholder="what is your result?"></p>
 										<p>
-											
-											
+																						
 											<span>
 												<input type="checkbox" name="" /> Rx
 											</span> 
