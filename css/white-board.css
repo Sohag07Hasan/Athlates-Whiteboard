@@ -79,9 +79,6 @@ div.athlates-white-board{
  	display: none; 
 }
 
-.althlates-new-entry{
-	display: none;
-}
 
 .whiteboard-class-row{
 	background: #1A1A1A;
@@ -101,6 +98,7 @@ td.whiteboard-class a:hover{
 	text-decoration: none;
 	cursor: pointer !important;
 }
+
 
 .althlates-new-entry td{
 	border-bottom: 1px solid #7F7F7F;

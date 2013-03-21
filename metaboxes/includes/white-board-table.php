@@ -10,12 +10,7 @@
 		<table class="whiteboard-entry-tabel">
 			<tr class="whiteboard-entry-row">
 				<td> <h2>Entries</h2> </td>
-				<td> 
-					<a class="white-board-entry-add" id="add-anew-entry_<?php echo $post->ID; ?>">+</a>
-					<input type="hidden" id="selected-post-id_<?php echo $post->ID; ?>" value="<?php echo $post->ID; ?>" />
-					<input type="hidden" id="selected-class-name_<?php echo $post->ID?>" value="" />
-					<input type="hidden" id="selected-component-name<?php echo $post->ID; ?>" value="" />
-				</td>
+				<td> <a class="white-board-entry-add">+</a> </td>
 			</tr>
 		</table>
 		
@@ -33,10 +28,7 @@
 								$class = "whiteboard-class";
 							}
 						?> 						
-						<td class="<?php echo $class;?>" id="<?php echo 'boardclass' . '-' . $post->ID . '-' . $key; ?>" >
-							<a> <?php echo $data['class']; ?> </a>
-							<input type="hidden" id="<?php echo 'Classname' . '-' . $post->ID . '-' . $key; ?>" value="<?php echo $data['class']; ?>">
-						</td> 
+						<td class="<?php echo $class;?>" id="<?php echo 'boardclass' . '-' . $post->ID . '-' . $key; ?>" ><a> <?php echo $data['class']; ?> </a></td> 
 						<?php endforeach; ?>
 					</tr>
 				</table>
@@ -51,7 +43,7 @@
 						}
 						?>
 						
-						<table class="<?php echo $class; ?>" id="whiteboard-entries-<?php echo $post->ID . '-' . $key;?>">
+						<table class="<?php echo $class; ?>" id="whiteboard-newentry-<?php echo $post->ID . '-' . $key;?>">
 							<tr>
 								<td>Name</td>
 								<?php foreach($data['component'] as $k => $component) : ?>
@@ -64,8 +56,7 @@
 							$cell_spacing = count($data['component']) + 1;
 						?>
 						
-						<!-- athlates new score input -->
-						<table class="althlates-new-entry whiteboard-entries" id="whiteboard-new-entries-<?php echo preg_replace('/[ ]/', '-', $data['class']) . '_' . $post->ID;  ?>">
+						<table class="althlates-new-entry">
 							<tr> 
 								<td colspan="<?php echo $cell_spacing; ?>">
 									<h4>Email Adress</h4>

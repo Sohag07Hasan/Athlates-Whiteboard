@@ -19,7 +19,7 @@ class Athlatics_Board_Admin{
 	
 	//metabox creation
 	static function custom_metaboxes(){
-		add_meta_box('athlates_whiteboard', 'Athlates White Board', array(get_class(), 'custom_metabox_content'), 'post', 'high', 'core');
+		add_meta_box('athlates_whiteboard', 'Athlates White Board', array(get_class(), 'custom_metabox_content'), 'post');
 	}
 	
 	
