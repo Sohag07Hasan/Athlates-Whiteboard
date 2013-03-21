@@ -101,6 +101,10 @@
 								</tr>									
 							<?php endforeach;?>
 							
+							<tr>
+								<td><input type="button" value="Add Record"></td>
+							</tr>
+							
 						</table>
 						
 						<?php 

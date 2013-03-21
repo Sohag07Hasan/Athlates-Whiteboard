@@ -41,7 +41,9 @@ div.athlates-white-board{
     border-radius: 3px 3px 3px 3px !important;
   	z-index:10; 
     background-color: #FFFFFF;
-    
+
+    /*scroll*/
+    overflow: auto;
 }
 
 .whiteboard-window-shown{
