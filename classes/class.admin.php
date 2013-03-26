@@ -14,7 +14,22 @@ class Athlatics_Board_Admin{
 		add_filter('the_content', array(get_class(), 'attach_white_board'), 10, 1);
 		
 		add_action('wp_enqueue_scripts', array(get_class(), 'print_scripts'));
+		
+		//ajax actions
+		add_action('wp_ajax_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
+		add_action('wp_ajax_nopriv_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
 	}
+	
+	
+	
+	
+	//ajax request
+	static function ajax_reuqest_parsing(){
+		$data = $_POST['form_data'];
+		var_dump($data);
+		die();
+	}
+	
 	
 	
 	//metabox creation
