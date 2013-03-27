@@ -81,6 +81,8 @@ jQuery(document).ready(function($){
 			//for submittion class
 			$('.whiteboardNewEntriesSubmitted').on('submit', function(){
 				
+				html_form_id = '#' + $(this).attr('id');
+				
 				$.ajax({
 					type: 'post',
 					url: 'http://localhost/wordpress/wp-admin/admin-ajax.php',
@@ -93,7 +95,7 @@ jQuery(document).ready(function($){
 					},
 					
 					success: function($result){
-						//alert($result);
+						//$(':input', html_form_id).not(':button', ':submit', ':reset', ':hidden').val('').removeAttr('checked').removeAttr('selected');
 						jQuery('#site-generator').html($result);
 					},					
 					

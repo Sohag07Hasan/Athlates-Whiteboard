@@ -83,9 +83,7 @@ class Athlatics_Board_Admin{
 				$wpdb->insert($user_meta, array('user_id'=>$user_id, 'post_id'=>$post_id, 'log'=>serialize($log)), array('%d', '%d', '%s'));
 				$success = $wpdb->insert_id;
 			}
-			
-			
-			
+					
 		}
 		
 		echo $success;
