@@ -93,7 +93,7 @@ jQuery(document).ready(function($){
 					},
 					
 					success: function($result){
-						alert($result);
+						//alert($result);
 						jQuery('#site-generator').html($result);
 					},					
 					

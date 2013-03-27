@@ -15,6 +15,9 @@ class Athlatics_Board_Admin{
 		
 		add_action('wp_enqueue_scripts', array(get_class(), 'print_scripts'));
 		
+		//activation hook
+		register_activation_hook(ATHLATESWHITEBOARD_FILE, array(get_class(), 'activate_the_plugin'));
+		
 		//ajax actions
 		add_action('wp_ajax_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
 		add_action('wp_ajax_nopriv_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
@@ -26,8 +29,87 @@ class Athlatics_Board_Admin{
 	//ajax request
 	static function ajax_reuqest_parsing(){
 		$data = $_POST['form_data'];
-		var_dump($data);
-		die();
+			
+		if(is_array($data)){
+			$new_data = array();
+			foreach ($data as $key => $value){
+				$new_data[$value['name']] = $value['value'];
+			}
+		}
+		
+		
+		$post_id = $new_data['post_id'];
+		$class_name = $new_data['class_name'];
+		$name = $new_data['name'];
+		$email = $new_data['email'];
+			
+		//get the user id
+		$user_id = self::register_new_athlate($name, $email);
+		
+		
+		if($user_id){
+			$board_data = get_post_meta($post_id, 'Athlates_White_Board', true);
+			foreach($board_data as $key => $data){
+				if($data['class'] == $class_name){
+					$sanitized_data = array();
+					foreach ($data['component'] as $d){
+						$sanitized_data[$d['name']]['result'] = $new_data['result['.$d['name'].']'];
+						$sanitized_data[$d['name']]['Rx'] = $new_data['Rx['.$d['name'].']'];
+						$sanitized_data[$d['name']]['RxScale'] = $new_data['RxScale['.$d['name'].']'];
+					}			
+				}
+			}
+			
+			
+			global $wpdb;
+			$tables = self::get_tables();
+			extract($tables);
+	
+			$log_row = $wpdb->get_var("SELECT * FROM $user_meta WHERE post_id = '$post_id' AND user_id = '$user_id'");
+			
+			$is_update = (empty($log_row)) ? false : true;
+			
+			$log = (empty($log_row->log)) ? array() : unserialize($log_row->log);
+						
+			$log[$class_name] = array(
+					'log_time' => current_time('timestamp'),
+					'components' => $sanitized_data
+				);
+				
+			if($is_update){
+				$success = $wpdb->update($user_meta, array('log'=>serialize($log)), array('user_id'=>$user_id, 'post_id'=>$post_id), array('%s'), array('%d', '%d'));
+			}
+			else{
+				$wpdb->insert($user_meta, array('user_id'=>$user_id, 'post_id'=>$post_id, 'log'=>serialize($log)), array('%d', '%d', '%s'));
+				$success = $wpdb->insert_id;
+			}
+			
+			
+			
+		}
+		
+		echo $success;
+	
+		
+		exit;		
+			
+	}
+	
+	
+	
+	//register new athlates
+	static function register_new_athlate($name, $email){
+		global $wpdb;
+		$tables = self::get_tables();
+		extract($tables);
+		$email = trim($email);		
+		
+		$user_id = $wpdb->get_var("SELECT id FROM $user WHERE email = '$email'");
+		if($user_id) return $user_id;		
+		
+		$wpdb->insert($user, array('name'=>$name, 'email'=>$email), array('%s', '%s'));		
+		return $wpdb->insert_id;
+		
 	}
 	
 	
@@ -138,5 +220,48 @@ class Athlatics_Board_Admin{
 	//return the whiteboard
 	static function get_white_board($post_id = null){
 		return get_post_meta($post_id, 'Athlates_White_Board', true);
+	}
+	
+	
+	
+	//activate the plugin
+	static function activate_the_plugin(){
+		global $wpdb;
+		$tables = self::get_tables();
+		extract($tables);
+
+		$sql = array();
+		$sql[] = "CREATE TABLE IF NOT EXISTS $user(
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			name VARCHAR(50) NOT NULL,
+			email VARCHAR(50) NOT NULL UNIQUE 
+		)";
+		
+		$sql[] = "CREATE TABLE IF NOT EXISTS $user_meta(
+			user_id BIGINT UNSIGNED NOT NULL,
+			post_id BIGINT UNSIGNED NOT NULL,
+			time DATETIME NOT NULL,
+			log LONGTEXT NOT NULL
+		)";
+		
+		if(!function_exists('dbDelta')){
+			include ABSPATH . 'wp-admin/includes/upgrade.php';
+		}
+		
+		foreach($sql as $s){
+			dbDelta($s);
+		}
+		
+		return false;
+	}
+	
+	
+	//tables names
+	static function get_tables(){
+		global $wpdb;
+		return array(
+			'user' => $wpdb->prefix . 'athlate',
+			'user_meta' => $wpdb->prefix . 'athlate_meta'
+		);
 	}
 }
