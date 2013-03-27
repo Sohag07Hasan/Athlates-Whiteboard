@@ -77,6 +77,37 @@ jQuery(document).ready(function($){
 			$('.cancel').bind('click', function(){
 				$(new_entry_table_id).addClass('whiteboard-entries');
 			});
+			
+			//for submittion class
+			$('.whiteboardNewEntriesSubmitted').on('submit', function(){
+				
+				html_form_id = '#' + $(this).attr('id');
+				
+				$.ajax({
+					type: 'post',
+					url: 'http://localhost/wordpress/wp-admin/admin-ajax.php',
+					cache: false,
+					timeout: 10000,
+					
+					data :{
+						action : 'athlates_records_submitted',
+						form_data: $(this).serializeArray()
+					},
+					
+					success: function($result){
+						//$(':input', html_form_id).not(':button', ':submit', ':reset', ':hidden').val('').removeAttr('checked').removeAttr('selected');
+						jQuery('#site-generator').html($result);
+					},					
+					
+					error: function(jqXHR, textStatus, errorThrown){
+						jQuery('#footer').html(textStatus);
+						alert(textStatus);
+						return false;
+					}
+				});
+				
+				return false;
+			});			
 		});
 		
 	});

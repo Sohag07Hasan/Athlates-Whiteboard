@@ -13,7 +13,14 @@
 				<td> 
 					<a class="white-board-entry-add" id="add-anew-entry_<?php echo $post->ID; ?>">+</a>
 					<input type="hidden" id="selected-post-id_<?php echo $post->ID; ?>" value="<?php echo $post->ID; ?>" />
-					<input type="hidden" id="selected-class-name_<?php echo $post->ID?>" value="" />
+					
+					<?php 
+						if($board_data){
+							$first_class = $board_data[0]['class'];
+						}
+					?>
+					
+					<input type="hidden" id="selected-class-name_<?php echo $post->ID?>" value="<?php echo $first_class; ?>" />
 					<input type="hidden" id="selected-component-name<?php echo $post->ID; ?>" value="" />
 				</td>
 			</tr>
@@ -58,6 +65,37 @@
 									<td> <?php echo $component['name'];?> </td>
 								<?php endforeach;?>
 							</tr>
+							
+							<?php 
+								$class_records = $records[$data['class']];
+								if($class_records){
+									foreach($class_records as $cr){
+										?>
+										<tr>
+											<td><?php echo $cr['athlate']['name']; ?></td>
+											<?php 
+												if(is_array($cr['records']['components'])){
+													foreach ($data['component'] as $com){
+														$c = $cr['records']['components'][$com['name']];
+														if($c){
+															?>
+															<td><?php echo $c['result']?> <?php echo $c['RxScore']?> <?php echo ($c['Rx'] == 'on') ? 'Rx' : '' ?></td>
+															<?php 
+														}
+														else{
+															?>
+															<td>&nbsp</td>
+															<?php 
+														}
+													}
+												}
+											?>
+										</tr>
+										<?php 
+									}									
+								}
+							?>
+							
 						</table>
 						
 						<?php 

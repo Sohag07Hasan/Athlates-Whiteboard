@@ -62,56 +62,56 @@ jQuery(document).ready(function($){
 				}
 			}
 			
-		}
-		
-		//if + button is pressed and the other actions
-		$('.white-board-entry-add').bind('click', function(){
-			var selected_id = $(this).attr('id');
-			var attributes = selected_id.split('_');
-			var post_id = attributes[1];
-			var selected_class_name = $('#selected-class-name_'+post_id).val();
-			selected_class_name = selected_class_name.replace(" ", '-');
-			var new_entry_table_id = '#whiteboard-new-entries-' + selected_class_name + '_' + post_id;		
-			$(new_entry_table_id).removeClass('whiteboard-entries');
-			
-			$('.cancel').bind('click', function(){
-				$(new_entry_table_id).addClass('whiteboard-entries');
-			});
-			
-			//for submittion class
-			$('.whiteboardNewEntriesSubmitted').on('submit', function(){
-				
-				html_form_id = '#' + $(this).attr('id');
-				
-				$.ajax({
-					type: 'post',
-					url: 'http://localhost/wordpress/wp-admin/admin-ajax.php',
-					cache: false,
-					timeout: 10000,
-					
-					data :{
-						action : 'athlates_records_submitted',
-						form_data: $(this).serializeArray()
-					},
-					
-					success: function($result){
-						//$(':input', html_form_id).not(':button', ':submit', ':reset', ':hidden').val('').removeAttr('checked').removeAttr('selected');
-						jQuery('#site-generator').html($result);
-					},					
-					
-					error: function(jqXHR, textStatus, errorThrown){
-						jQuery('#footer').html(textStatus);
-						alert(textStatus);
-						return false;
-					}
-				});
-				
-				return false;
-			});			
-		});
+		}	
 		
 	});
 	
+	
+	//if + button is pressed and the other actions
+	$('.white-board-entry-add').bind('click', function(){
+		var selected_id = $(this).attr('id');
+		var attributes = selected_id.split('_');
+		var post_id = attributes[1];
+		var selected_class_name = $('#selected-class-name_'+post_id).val();
+		selected_class_name = selected_class_name.replace(" ", '-');
+		var new_entry_table_id = '#whiteboard-new-entries-' + selected_class_name + '_' + post_id;		
+		$(new_entry_table_id).removeClass('whiteboard-entries');
+		
+		$('.cancel').bind('click', function(){
+			$(new_entry_table_id).addClass('whiteboard-entries');
+		});
+		
+		//for submittion class
+		$('.whiteboardNewEntriesSubmitted').on('submit', function(){
+			
+			html_form_id = '#' + $(this).attr('id');
+			
+			$.ajax({
+				type: 'post',
+				url: 'http://localhost/wordpress/wp-admin/admin-ajax.php',
+				cache: false,
+				timeout: 10000,
+				
+				data :{
+					action : 'athlates_records_submitted',
+					form_data: $(this).serializeArray()
+				},
+				
+				success: function($result){
+					//$(':input', html_form_id).not(':button', ':submit', ':reset', ':hidden').val('').removeAttr('checked').removeAttr('selected');
+					jQuery('#site-generator').html($result);
+				},					
+				
+				error: function(jqXHR, textStatus, errorThrown){
+					jQuery('#footer').html(textStatus);
+					alert(textStatus);
+					return false;
+				}
+			});
+			
+			return false;
+		});			
+	});
 	
 	
 	

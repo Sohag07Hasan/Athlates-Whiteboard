@@ -13,7 +13,14 @@
 				<td> 
 					<a class="white-board-entry-add" id="add-anew-entry_<?php echo $post->ID; ?>">+</a>
 					<input type="hidden" id="selected-post-id_<?php echo $post->ID; ?>" value="<?php echo $post->ID; ?>" />
-					<input type="hidden" id="selected-class-name_<?php echo $post->ID?>" value="" />
+					
+					<?php 
+						if($board_data){
+							$first_class = $board_data[0]['class'];
+						}
+					?>
+					
+					<input type="hidden" id="selected-class-name_<?php echo $post->ID?>" value="<?php echo $first_class; ?>" />
 					<input type="hidden" id="selected-component-name<?php echo $post->ID; ?>" value="" />
 				</td>
 			</tr>
@@ -58,6 +65,37 @@
 									<td> <?php echo $component['name'];?> </td>
 								<?php endforeach;?>
 							</tr>
+							
+							<?php 
+								$class_records = $records[$data['class']];
+								if($class_records){
+									foreach($class_records as $cr){
+										?>
+										<tr>
+											<td><?php echo $cr['athlate']['name']; ?></td>
+											<?php 
+												if(is_array($cr['records']['components'])){
+													foreach ($data['component'] as $com){
+														$c = $cr['records']['components'][$com['name']];
+														if($c){
+															?>
+															<td><?php echo $c['result']?> <?php echo $c['RxScore']?> <?php echo ($c['Rx'] == 'on') ? 'Rx' : '' ?></td>
+															<?php 
+														}
+														else{
+															?>
+															<td>&nbsp</td>
+															<?php 
+														}
+													}
+												}
+											?>
+										</tr>
+										<?php 
+									}									
+								}
+							?>
+							
 						</table>
 						
 						<?php 
@@ -65,47 +103,52 @@
 						?>
 						
 						<!-- athlates new score input -->
-						<table class="althlates-new-entry whiteboard-entries" id="whiteboard-new-entries-<?php echo preg_replace('/[ ]/', '-', $data['class']) . '_' . $post->ID;  ?>">
-							<tr> 
-								<td colspan="<?php echo $cell_spacing; ?>">
-									<h4>Email Adress</h4>
-									<input type="text" name="new-athlates-name" placeholder="name@example.com" />
-								</td>
-							</tr>
+						<form action="" method="post" class="whiteboardNewEntriesSubmitted" id="whiteboardNewEntries_<?php echo preg_replace('/[ ]/', '-', $data['class']) . '_' . $post->ID; ?>">
 							
-							<tr>
-								<td colspan="<?php echo $cell_spacing; ?>">
-									<h4>Name</h4>
-									<input type="text" placeholder="Guest" />
-								</td>
-							</tr>
+							<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>" >
+							<input type="hidden" name="class_name" value="<?php echo $data['class']; ?>" >
 							
-							<?php foreach($data['component'] as $key => $component) : ?>
+							<table class="althlates-new-entry whiteboard-entries" id="whiteboard-new-entries-<?php echo preg_replace('/[ ]/', '-', $data['class']) . '_' . $post->ID;  ?>">
+								<tr> 
+									<td colspan="<?php echo $cell_spacing; ?>">
+										<h4>Email Adress</h4>
+										<input type="text" name="email" placeholder="name@example.com" />
+									</td>
+								</tr>
+								
 								<tr>
 									<td colspan="<?php echo $cell_spacing; ?>">
-										<h4><?php echo $component['name'];?></h4>
-										<p><input type="text" placeholder="what is your result?"></p>
-										<p>
-																						
-											<span>
-												<input type="checkbox" name="" /> Rx
-											</span> 
-											<span style="margin: 0 20px 0 20px">or</span> 
-											<span>
-												<input type="text" name="" placeholder="How do you scale?" />
-											</span> 												 
-											
-										</p>
+										<h4>Name</h4>
+										<input name="name" type="text" placeholder="Guest" />
 									</td>
-								</tr>									
-							<?php endforeach;?>
-							
-							<tr>
-								<td><input type="button" value="Add Record"> <input class="cancel" type="button" value="cancel"> </td>
-							</tr>
-							
-						</table>
-						
+								</tr>
+								
+								<?php foreach($data['component'] as $key => $component) : ?>
+									<tr>
+										<td colspan="<?php echo $cell_spacing; ?>">
+											<h4><?php echo $component['name'];?></h4>
+											<p><input name="result[<?php echo $component['name']; ?>]" type="text" placeholder="what is your result?"></p>
+											<p>
+																							
+												<span>
+													<input name="Rx[<?php echo $component['name']; ?>]" type="checkbox" name="" /> Rx
+												</span> 
+												<span style="margin: 0 20px 0 20px">or</span> 
+												<span>
+													<input name="RxScale[<?php echo $component['name']; ?>]" type="text" name="" placeholder="How do you scale?" />
+												</span> 												 
+												
+											</p>
+										</td>
+									</tr>									
+								<?php endforeach;?>
+								
+								<tr>
+									<td><input type="submit" class="addRecords-<?php echo $post->ID ?>" value="Add Record"> <input class="cancel" type="button" value="cancel"> </td>
+								</tr>
+								
+							</table>
+						</form>
 						<?php 
 					}			
 			}

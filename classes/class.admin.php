@@ -26,7 +26,7 @@ class Athlatics_Board_Admin{
 	
 	
 	
-	//ajax request
+	//ajax request handling
 	static function ajax_reuqest_parsing(){
 		$data = $_POST['form_data'];
 			
@@ -65,22 +65,28 @@ class Athlatics_Board_Admin{
 			$tables = self::get_tables();
 			extract($tables);
 	
-			$log_row = $wpdb->get_var("SELECT * FROM $user_meta WHERE post_id = '$post_id' AND user_id = '$user_id'");
+			$log_row = $wpdb->get_row("SELECT * FROM $user_meta WHERE post_id = '$post_id' AND user_id = '$user_id'");
+			
+		//	var_dump($log_row);
 			
 			$is_update = (empty($log_row)) ? false : true;
 			
 			$log = (empty($log_row->log)) ? array() : unserialize($log_row->log);
+			
+			//var_dump($log);
 						
 			$log[$class_name] = array(
 					'log_time' => current_time('timestamp'),
 					'components' => $sanitized_data
 				);
 				
+			//var_dump($log); die();
+				
 			if($is_update){
-				$success = $wpdb->update($user_meta, array('log'=>serialize($log)), array('user_id'=>$user_id, 'post_id'=>$post_id), array('%s'), array('%d', '%d'));
+				$success = $wpdb->update($user_meta, array('log'=>serialize($log), 'time'=>current_time('mysql')), array('user_id'=>$user_id, 'post_id'=>$post_id), array('%s', '%s'), array('%d', '%d'));
 			}
 			else{
-				$wpdb->insert($user_meta, array('user_id'=>$user_id, 'post_id'=>$post_id, 'log'=>serialize($log)), array('%d', '%d', '%s'));
+				$wpdb->insert($user_meta, array('user_id'=>$user_id, 'post_id'=>$post_id, 'time'=>current_time('mysql'), 'log'=>serialize($log)), array('%d', '%d', '%s', '%s'));
 				$success = $wpdb->insert_id;
 			}
 					
@@ -196,16 +202,19 @@ class Athlatics_Board_Admin{
 	}
 	
 	
-	//the content
+	//the content hook to show the add cf white board
 	static function attach_white_board($content){
 		global $post;
 		$board_data = self::get_white_board($post->ID);
+		
+		$records = self::get_athlates_records($post->ID);
+		
 		if($board_data){
-			//$board_div = '<div class="athlates-white-board"> <h1>Whiteboard</h1>';
+			
 			ob_start();
 			include ATHLATESWHITEBOARD_DIR . '/includes/white-board-table.php';
 			$board_data = ob_get_clean();
-			//$board_div .= '</div>';
+			ob_end_flush();
 		}
 		else{
 			$board_data = '';
@@ -220,6 +229,36 @@ class Athlatics_Board_Admin{
 		return get_post_meta($post_id, 'Athlates_White_Board', true);
 	}
 	
+	
+	//get the athlates records
+	static function get_athlates_records($post_id){
+		global $wpdb;
+		$tables = self::get_tables();
+		extract($tables);
+		
+		//$records = $wpdb->get_results("SELECT user_id, log FROM $user_meta WHERE post_id = '$post_id' ORDER BY time ASC");
+		$records = $wpdb->get_results("SELECT $user_meta.user_id, $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id WHERE $user_meta.post_id = '$post_id' ORDER BY $user_meta.time ASC");
+		
+		$structured_record = array();
+		
+		if($records){
+			foreach($records as $record){
+				if(isset($record->log)){
+					$log = unserialize($record->log);
+					if(is_array($log)){
+						foreach ($log as $key => $l){
+							$structured_record[$key][] = array(
+								'athlate' => array('name'=>$record->name, 'id'=>$record->user_id),
+								'records' => $l
+							);
+						}
+					}			
+				}
+			}
+		}
+		
+		return $structured_record;
+	}
 	
 	
 	//activate the plugin
