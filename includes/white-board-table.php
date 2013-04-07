@@ -1,64 +1,55 @@
 <div class="athlates-white-board">
-	<h1 id="whiteboard-window-<?php echo $post->ID;?>">Whiteboard</h1>
+	<h1>Whiteboard</h1>
 </div>
 <div style="clear:both"></div>
 
 <div class="athlates-white-board-popup">
 
-	<div class="whiteboard-window whiteboard-window-shown" id="wwhiteboard-window-<?php echo $post->ID; ?>">
+	<div class="whiteboard-window whiteboard-window-hidden">	
+		 
 		
-		<table class="whiteboard-entry-tabel">
-			<tr class="whiteboard-entry-row">
-				<td> <h2>Entries</h2> </td>
-				<td> 
-					<a class="white-board-entry-add" id="add-anew-entry_<?php echo $post->ID; ?>">+</a>
-					<input type="hidden" id="selected-post-id_<?php echo $post->ID; ?>" value="<?php echo $post->ID; ?>" />
-					
-					<?php 
-						if($board_data){
-							$first_class = $board_data[0]['class'];
-						}
-					?>
-					
-					<input type="hidden" id="selected-class-name_<?php echo $post->ID?>" value="<?php echo $first_class; ?>" />
-					<input type="hidden" id="selected-component-name<?php echo $post->ID; ?>" value="" />
-				</td>
-			</tr>
-		</table>
-		
+		<div post_id="<?php echo $post->ID; ?>" class="whiteboard-branding">
+			<span style="float: left;">Entries</span>
+			<span class="add-new-entry" style="float: right;">+</span>
+		</div> 
+		<div style="clear:both"></div>
+		 		
 		<?php 
+		
 			if($board_data){
 				?>
-				<table class="whiteboard-entry-tabel">
-					<tr class="whiteboard-class-row">
+				<table class="whiteboard-classes">
+					<tr>
 						<?php 
 						foreach($board_data as $key => $data) : 
-							if($key == 0){
-								$class = "whiteboard-class whiteboard-class-selected";
-							}
-							else{
-								$class = "whiteboard-class";
-							}
+							$c = ($key == 0) ? 'whiteboard-class selected-class' : 'whiteboard-class';												
 						?> 						
-						<td class="<?php echo $class;?>" id="<?php echo 'boardclass' . '-' . $post->ID . '-' . $key; ?>" >
-							<a> <?php echo $data['class']; ?> </a>
-							<input type="hidden" id="<?php echo 'Classname' . '-' . $post->ID . '-' . $key; ?>" value="<?php echo $data['class']; ?>">
+						<td whiteboard_class="<?php echo $data['class']; ?>" post_id="<?php echo $post->ID; ?>" class="<?php echo $c; ?>">
+							<a> <?php echo $data['class']; ?> </a>						
 						</td> 
 						<?php endforeach; ?>
 					</tr>
 				</table>
+								
 				<?php 
-				//athlates scroe showing
+				//athlates entries are showing
+								
 					foreach ($board_data as $key => $data){
+						$table_id = preg_replace('/[ ]/', '-', $data['class']) . '_' . $post->ID;	
+						$form_id = 'form_' . $table_id;
+						
 						if($key == 0){
-							$class = "whiteboard-entry-table";
+							$class = "whitebaord-class-entries";
+							?>
+							<input type="hidden" post_id="<?php echo $post->ID; ?>" class_name="<?php echo $data['class']; ?>" />
+							<?php 
 						}
 						else{
-							$class= "whiteboard-entry-table whiteboard-entries";
+							$class= "whitebaord-class-entries hidden-entries";
 						}
 						?>
 						
-						<table class="<?php echo $class; ?>" id="whiteboard-entries-<?php echo $post->ID . '-' . $key;?>">
+						<table post_id="<?php echo $post->ID; ?>" class="<?php echo $class; ?>" id="<?php echo $table_id; ?>" >
 							<tr>
 								<td>Name</td>
 								<?php foreach($data['component'] as $k => $component) : ?>
@@ -103,23 +94,23 @@
 						?>
 						
 						<!-- athlates new score input -->
-						<form action="" method="post" class="whiteboardNewEntriesSubmitted" id="whiteboardNewEntries_<?php echo preg_replace('/[ ]/', '-', $data['class']) . '_' . $post->ID; ?>">
+						<form action="" method="post" post_id="<?php echo $post->ID; ?>" id="<?php echo $form_id; ?>" class="new-entry-form hidden-entries" >
 							
 							<input type="hidden" name="post_id" value="<?php echo $post->ID; ?>" >
 							<input type="hidden" name="class_name" value="<?php echo $data['class']; ?>" >
 							
-							<table class="althlates-new-entry whiteboard-entries" id="whiteboard-new-entries-<?php echo preg_replace('/[ ]/', '-', $data['class']) . '_' . $post->ID;  ?>">
+							<table>
 								<tr> 
 									<td colspan="<?php echo $cell_spacing; ?>">
 										<h4>Email Adress</h4>
-										<input type="text" name="email" placeholder="name@example.com" />
+										<input type="text" name="email" placeholder="name@example.com" value="" />
 									</td>
 								</tr>
 								
 								<tr>
 									<td colspan="<?php echo $cell_spacing; ?>">
 										<h4>Name</h4>
-										<input name="name" type="text" placeholder="Guest" />
+										<input name="name" type="text" placeholder="Guest" value="" />
 									</td>
 								</tr>
 								
@@ -127,15 +118,15 @@
 									<tr>
 										<td colspan="<?php echo $cell_spacing; ?>">
 											<h4><?php echo $component['name'];?></h4>
-											<p><input name="result[<?php echo $component['name']; ?>]" type="text" placeholder="what is your result?"></p>
+											<p><input name="result[<?php echo $component['name']; ?>]" type="text" placeholder="what is your result?" value="" > </p>
 											<p>
 																							
 												<span>
-													<input name="Rx[<?php echo $component['name']; ?>]" type="checkbox" name="" /> Rx
+													<input name="Rx[<?php echo $component['name']; ?>]" type="checkbox" value="" /> Rx
 												</span> 
 												<span style="margin: 0 20px 0 20px">or</span> 
 												<span>
-													<input name="RxScale[<?php echo $component['name']; ?>]" type="text" name="" placeholder="How do you scale?" />
+													<input name="RxScale[<?php echo $component['name']; ?>]" type="text" placeholder="How do you scale?" value="" />
 												</span> 												 
 												
 											</p>

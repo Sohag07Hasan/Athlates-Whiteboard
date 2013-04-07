@@ -3,6 +3,9 @@
 
 
 class Athlatics_Board_Admin{
+	
+	
+	static $ajax_requested = 0;
 
 	//hooks
 	static function init(){
@@ -28,6 +31,9 @@ class Athlatics_Board_Admin{
 	
 	//ajax request handling
 	static function ajax_reuqest_parsing(){
+		
+		
+		
 		$data = $_POST['form_data'];
 			
 		if(is_array($data)){
@@ -89,11 +95,46 @@ class Athlatics_Board_Admin{
 				$wpdb->insert($user_meta, array('user_id'=>$user_id, 'post_id'=>$post_id, 'time'=>current_time('mysql'), 'log'=>serialize($log)), array('%d', '%d', '%s', '%s'));
 				$success = $wpdb->insert_id;
 			}
+						
+			//now fetching the updated informations
+
+			$updated_data = $wpdb->get_row("SELECT * FROM $user_meta WHERE post_id = '$post_id' AND user_id = '$user_id'");
+			
+			$records = $wpdb->get_row("SELECT $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id WHERE $user_meta.post_id = '$post_id' AND $user.id = '$user_id'");
+			
+			if($records){
+				
+				$log_data = unserialize($records->log);
+				if(is_array($log_data)){
+					$class_data = $log_data[$class_name];
 					
+					foreach($board_data as $key => $data){
+						if($data['class'] == $class_name){
+							$sanitized_data = array();
+							$string = '<tr><td>'.$records->name.'</td>';
+							foreach ($data['component'] as $d){
+								$string .= '<td>'.$class_data['components'][$d['name']]['result']. ' ' .$class_data['components'][$d['name']]['Rx'].'</td>';
+								/*
+								$sanitized_data[$d['name']]['result'] = $new_data['result['.$d['name'].']'];
+								$sanitized_data[$d['name']]['Rx'] = $new_data['Rx['.$d['name'].']'];
+								$sanitized_data[$d['name']]['RxScale'] = $new_data['RxScale['.$d['name'].']'];
+								*/
+							}
+							$string .= '</tr>';			
+						}
+					}
+				}
+			}
+			
 		}
 		
-		echo $success;
-	
+		$success_array = array(
+			'status' => $success,
+			'data' => $string
+		);
+		
+		echo json_encode($success_array);
+		
 		
 		exit;		
 			
@@ -157,6 +198,10 @@ class Athlatics_Board_Admin{
 		wp_enqueue_script('jquery');
 		wp_register_script('athlates_white_board_jquery', ATHLATESWHITEBOARD_URL . 'js/Cf-front-end.js', array('jquery'));
 		wp_enqueue_script('athlates_white_board_jquery');
+		
+		wp_localize_script('athlates_white_board_jquery', 'AthlatesAjax', array( 
+					'ajaxurl' => admin_url( 'admin-ajax.php' )
+		));
 	}
 	
 	

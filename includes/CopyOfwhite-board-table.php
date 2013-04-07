@@ -112,14 +112,14 @@
 								<tr> 
 									<td colspan="<?php echo $cell_spacing; ?>">
 										<h4>Email Adress</h4>
-										<input type="text" name="email" placeholder="name@example.com" />
+										<input type="text" name="email" placeholder="name@example.com" value="" />
 									</td>
 								</tr>
 								
 								<tr>
 									<td colspan="<?php echo $cell_spacing; ?>">
 										<h4>Name</h4>
-										<input name="name" type="text" placeholder="Guest" />
+										<input name="name" type="text" placeholder="Guest" value="" />
 									</td>
 								</tr>
 								
@@ -127,15 +127,15 @@
 									<tr>
 										<td colspan="<?php echo $cell_spacing; ?>">
 											<h4><?php echo $component['name'];?></h4>
-											<p><input name="result[<?php echo $component['name']; ?>]" type="text" placeholder="what is your result?"></p>
+											<p><input name="result[<?php echo $component['name']; ?>]" type="text" placeholder="what is your result?" value="" > </p>
 											<p>
 																							
 												<span>
-													<input name="Rx[<?php echo $component['name']; ?>]" type="checkbox" name="" /> Rx
+													<input name="Rx[<?php echo $component['name']; ?>]" type="checkbox" value="" /> Rx
 												</span> 
 												<span style="margin: 0 20px 0 20px">or</span> 
 												<span>
-													<input name="RxScale[<?php echo $component['name']; ?>]" type="text" name="" placeholder="How do you scale?" />
+													<input name="RxScale[<?php echo $component['name']; ?>]" type="text" placeholder="How do you scale?" value="" />
 												</span> 												 
 												
 											</p>

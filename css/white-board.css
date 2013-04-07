@@ -46,7 +46,7 @@ div.athlates-white-board{
     overflow: auto;
 }
 
-.whiteboard-window-shown{
+.whiteboard-window-hidden{
 	visibility: hidden;
 }
 
@@ -57,68 +57,54 @@ div.athlates-white-board{
     float: right;
 }
 
-.whiteboard-entry-row{
-	
+.whiteboard-window table{
+	border: none;
 }
 
-.white-board-entry-add{
-	cursor: pointer !important;
-}
-
-.whiteboard-classes li{
-	display: inline;
-	padding-right: 30%;
-}
-
-.athlates-white-board td{
+.whiteboard-window table td{
 	border: none;	
 }
 
-
-
-/* white level ajax css */
-.whiteboard-entries{
- 	display: none; 
+.whiteboard-classes td{
+	text-align: center;
 }
 
 
-.whiteboard-class-row{
-	background: #1A1A1A;
+.whiteboard-branding{
+	padding: 10px;
+	font-size: 15px;
+	font-weight: bold;
+	margin-bottom: 10px;
 }
 
-td.whiteboard-class a{
-	color: #FFFFFF;
-	display: inline-block !important;
-    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif !important;
-    font-size: 14px !important;
-    font-weight: bold !important;
-    line-height: 1 !important;
-	padding-left: 10px;
+.whiteboard-branding span{
+	padding: 5px;
 }
 
-td.whiteboard-class a:hover{
-	text-decoration: none;
-	cursor: pointer !important;
+span.add-new-entry{
+	cursor: pointer;
 }
 
 
-.althlates-new-entry td{
-	border-bottom: 1px solid #7F7F7F;
-	padding: 3px;
+
+
+
+
+
+/*
+Transitions are made
+*/
+.hidden-entries{
+	display: none;
 }
 
 
-/*seelcted class*/
-.whiteboard-class-selected{
-	background-color: #FFFFFF;
-}
-/*seelcted class*/
-.whiteboard-class-selected a{
-	color: #1A1A1A !important;
+/* Class with entries */
+.whiteboard-class{
+	cursor: pointer;	
 }
 
-
-/*if white bord is selected*/
-.popup-shown{
-	visibility: visible;
+.selected-class{
+	background-color: #E5E5E5;
+	cursor: default;
 }
