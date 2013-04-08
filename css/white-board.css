@@ -87,9 +87,32 @@ span.add-new-entry{
 
 
 
+table.whitebaord-class-entries td{
+	/* this makes borders/margins work */   
+	border-bottom: 1px solid black;
+}
+
+table.whitebaord-class-entries tr{
+	cursor: pointer;
+}
+
+tr.headlinesholder{
+	cursor: default;	
+}
+
+tr.headlinesholder td{
+	font-weight: 900;	
+}
 
 
+table.whitebaord-class-entries tr:hover{
+	background-color: #BFBFBF;
+}
 
+td.whiteboard-more:hover{
+	font-size: 15px;
+	font-weight: 900;
+}
 
 /*
 Transitions are made

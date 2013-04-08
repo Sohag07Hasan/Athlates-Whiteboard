@@ -21,8 +21,12 @@ jQuery(document).ready(function($){
 			//setting the current class name
 			$('input[post_id|="'+post_id+'"]').attr('class_name', class_name);
 			
-			//hide the all blank form
+			//hide the all blank form and unbind the cancel click
 			$('.new-entry-form').addClass('hidden-entries');
+			
+			//unbinding events
+			$('input.cancel').unbind('click');
+			//$('input.entry-from-submit-button').unbind('click');
 			
 			//finding the exact matched table and toggle them
 			var active_table_id = class_name.replace('/[ ]/', '-') + '_' + post_id;			
@@ -43,25 +47,86 @@ jQuery(document).ready(function($){
 			var table_id = class_name.replace('/[ ]/', '-') + '_' + post_id;
 			var form_id = 'form_' + table_id;
 			
+			//unbinding the events
+			$('input.entry-from-submit-button').unbind('click');
+			
 			//toggle the style
 			toggleTableForm(table_id, form_id, 'hidden-entries');
 			
 			
+			$('#' + form_id).children().find('input.cancel').bind('click', function(){
+				toggleTableForm(form_id, table_id, 'hidden-entries');
+			});
+			
+			/*
 			//now if cancel is cliked
 			$('input.cancel').bind('click', function(){
 				toggleTableForm(form_id, table_id, 'hidden-entries');
 			});
+			*/
 			
+			//now form is submitted
+			/*
+			$('#' + form_id).on('submit', function(){
+				ajax_handling($(this), table_id);
+				return false;
+			});
+			*/
 			
-						
+			$('input.entry-from-submit-button').bind('click', function(){
+				ajax_handling($('#' + form_id), $('#' + table_id));
+				toggleTableForm(form_id, table_id, 'hidden-entries');
+			});
+			
+												
 		});
 		
 		
+		
+		
 		var toggleTableForm = function(first, second, class_name){
+		//	alert(first);
+		//	alert(second);
 			$('#' + first).addClass(class_name);
 			$('#' + second).removeClass(class_name);
-		}
+		};
 		
+		
+		//ajax handling
+		var ajax_handling = function(form, table){	
+			
+			$.ajax({
+				type: 'post',
+				url: AthlatesAjax.ajaxurl,
+				cache: false,
+				timeout: 10000,
+				
+				data :{
+					action : 'athlates_records_submitted',
+					form_data: form.serializeArray()
+				},
+				
+				success: function(result){
+									
+					var result = jQuery.parseJSON(result);
+					
+					jQuery('#site-generator').html(result.data);
+					
+				
+						var new_tr = result.data;
+						table.find('tbody').append(new_tr);	
+					
+					
+															
+				},					
+				
+				error: function(jqXHR, textStatus, errorThrown){
+					jQuery('#site-generator').html(textStatus);
+					alert(textStatus);
+					return false;
+				}
+			});
+		};
 		
 	});
 });

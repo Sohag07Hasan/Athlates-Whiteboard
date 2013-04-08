@@ -120,6 +120,7 @@ class Athlatics_Board_Admin{
 								$sanitized_data[$d['name']]['RxScale'] = $new_data['RxScale['.$d['name'].']'];
 								*/
 							}
+							$string .= '<td user_id=" ' . $user_id . ' " class="whiteboard-more"> > </td>';
 							$string .= '</tr>';			
 						}
 					}
@@ -265,7 +266,7 @@ class Athlatics_Board_Admin{
 			$board_data = '';
 		}
 		
-		return $content . $board_data;
+		return $board_data . $content;
 	}
 	
 	

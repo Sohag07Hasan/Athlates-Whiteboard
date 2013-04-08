@@ -50,11 +50,12 @@
 						?>
 						
 						<table post_id="<?php echo $post->ID; ?>" class="<?php echo $class; ?>" id="<?php echo $table_id; ?>" >
-							<tr>
+							<tr class="headlinesholder" style="cursor: default">
 								<td>Name</td>
 								<?php foreach($data['component'] as $k => $component) : ?>
 									<td> <?php echo $component['name'];?> </td>
 								<?php endforeach;?>
+								<td>&nbsp</td>
 							</tr>
 							
 							<?php 
@@ -63,7 +64,7 @@
 									foreach($class_records as $cr){
 										?>
 										<tr>
-											<td><?php echo $cr['athlate']['name']; ?></td>
+											<td user_id="<?php echo $cr['athlate']['id']; ?>"><?php echo $cr['athlate']['name']; ?></td>
 											<?php 
 												if(is_array($cr['records']['components'])){
 													foreach ($data['component'] as $com){
@@ -81,6 +82,7 @@
 													}
 												}
 											?>
+											<td user_id="<?php echo $cr['athlate']['id']; ?>" class="whiteboard-more"> > </td>
 										</tr>
 										<?php 
 									}									
@@ -135,7 +137,7 @@
 								<?php endforeach;?>
 								
 								<tr>
-									<td><input type="submit" class="addRecords-<?php echo $post->ID ?>" value="Add Record"> <input class="cancel" type="button" value="cancel"> </td>
+									<td><input class="entry-from-submit-button" type="button" post_id="<?php echo $post->ID ?>" value="Add Record"> <input class="cancel" type="button" value="cancel"> </td>
 								</tr>
 								
 							</table>
