@@ -57,22 +57,9 @@ jQuery(document).ready(function($){
 			$('#' + form_id).children().find('input.cancel').bind('click', function(){
 				toggleTableForm(form_id, table_id, 'hidden-entries');
 			});
+						
 			
-			/*
-			//now if cancel is cliked
-			$('input.cancel').bind('click', function(){
-				toggleTableForm(form_id, table_id, 'hidden-entries');
-			});
-			*/
-			
-			//now form is submitted
-			/*
-			$('#' + form_id).on('submit', function(){
-				ajax_handling($(this), table_id);
-				return false;
-			});
-			*/
-			
+			//again binding the submit button
 			$('input.entry-from-submit-button').bind('click', function(){
 				ajax_handling($('#' + form_id), $('#' + table_id));
 				toggleTableForm(form_id, table_id, 'hidden-entries');
@@ -80,6 +67,55 @@ jQuery(document).ready(function($){
 			
 												
 		});
+		
+		
+		/*
+		 *  when someone clicks more to show the athlates contribution
+		 * */
+		$('td.whiteboard-more').bind('click', function(){
+						
+			var parent_table = $(this).parents('table');
+			var class_name = parent_table.attr('class_name');
+			var post_id = parent_table.attr('post_id');
+			var current_table_id = parent_table.attr('id');
+			var user_id = $(this).attr('user_id');
+			
+			//ajax requesting
+			$.ajax({
+				type: 'post',
+				url: AthlatesAjax.ajaxurl,
+				cache: false,
+				timeout: 10000,
+				
+				data :{
+					action: 'athlates_contribution',
+					class_name: class_name,
+					post_id: post_id,
+					user_id: user_id
+				},
+				
+				success: function(result){
+										
+					//$('#colophon').html(result);
+					
+					//alert(result);
+					//	var new_tr = result.data;
+					//	table.find('tbody').append(new_tr);						
+															
+				},
+				
+				error: function(jqXHR, textStatus, errorThrown){
+					jQuery('#site-generator').html(textStatus);
+					alert(textStatus);
+					return false;
+				}
+				
+			});
+			
+			
+		});
+		
+		
 		
 		
 		
@@ -110,7 +146,7 @@ jQuery(document).ready(function($){
 									
 					var result = jQuery.parseJSON(result);
 					
-					jQuery('#site-generator').html(result.data);
+					//jQuery('#site-generator').html(result.data);
 					
 				
 						var new_tr = result.data;

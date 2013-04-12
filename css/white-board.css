@@ -131,3 +131,9 @@ Transitions are made
 	background-color: #E5E5E5;
 	cursor: default;
 }
+
+
+/*ajax response showing like athlates contribution to the post and class */
+div.ajax-showing-div{
+	display: none;
+}

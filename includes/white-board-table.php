@@ -31,9 +31,12 @@
 					</tr>
 				</table>
 								
-				<?php 
-				//athlates entries are showing
+				<!--  some ajax elements are to be shown -->
+				<div class="ajax-showing-div" post_id="<?php echo $post_id; ?>"></div>
 								
+								
+				<?php 
+				//athlates entries are showing								
 					foreach ($board_data as $key => $data){
 						$table_id = preg_replace('/[ ]/', '-', $data['class']) . '_' . $post->ID;	
 						$form_id = 'form_' . $table_id;
@@ -49,7 +52,7 @@
 						}
 						?>
 						
-						<table post_id="<?php echo $post->ID; ?>" class="<?php echo $class; ?>" id="<?php echo $table_id; ?>" >
+						<table post_id="<?php echo $post->ID; ?>" class="<?php echo $class; ?>" id="<?php echo $table_id; ?>" class_name="<?php echo $data['class']; ?>" >
 							<tr class="headlinesholder" style="cursor: default">
 								<td>Name</td>
 								<?php foreach($data['component'] as $k => $component) : ?>

@@ -21,10 +21,13 @@ class Athlatics_Board_Admin{
 		//activation hook
 		register_activation_hook(ATHLATESWHITEBOARD_FILE, array(get_class(), 'activate_the_plugin'));
 		
-		//ajax actions
+		//ajax actions to add a record
 		add_action('wp_ajax_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
 		add_action('wp_ajax_nopriv_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
+				
+		
 	}
+	
 	
 	
 	

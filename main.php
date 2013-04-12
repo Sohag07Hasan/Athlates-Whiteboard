@@ -13,5 +13,8 @@ define("ATHLATESWHITEBOARD_URL", plugins_url('/', __FILE__));
 include ATHLATESWHITEBOARD_DIR . '/classes/class.admin.php';
 Athlatics_Board_Admin::init();
 
+//ajax handling class
+include ATHLATESWHITEBOARD_DIR . '/classes/ajax_handling.php';
+Athlates_whiteboard_ajax_handling::init();
 
 ?>
