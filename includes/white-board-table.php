@@ -32,6 +32,12 @@
 				</table>
 								
 				<!--  some ajax elements are to be shown -->
+				<div class="ajax-showing-div-actions" post_id="<?php echo $post->ID; ?>" >
+					<div class="athlates-profile-back">back</div>
+					<div class="unlock-profile-info">edit</div>
+					<!--  -->
+				</div>
+				<div class="clear"></div>
 				<div class="ajax-showing-div" post_id="<?php echo $post->ID; ?>"></div>
 								
 								

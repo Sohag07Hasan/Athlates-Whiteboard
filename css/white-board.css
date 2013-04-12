@@ -139,9 +139,13 @@ div.ajax-showing-div{
 	text-align: center;
 }
 
+div.ajax-showing-div-actions{
+	display: none;
+}
+
 div.ajax-showing-div hr{
 	width: 100%;
-	margin: 0
+	margin: 0;
 }
 
 
@@ -151,4 +155,42 @@ dl.athlates-profile-viewing dt{
 
 dl.athlates-profile-viewing dd{
 	margin: 0;
+}
+
+a.athlates-profile-link{
+	background-color: #7AD5FF #48C5FE #098AC6 !important;
+	-moz-box-shadow: 0 0 5px 5px #888;
+	-webkit-box-shadow: 0 0 5px 5px#888;
+	box-shadow: 0 0 5px 5px #888;
+	margin-left: 10px;
+	padding: 5px;	
+}
+
+/* back and edit buttons */
+div.ajax-showing-div-actions div{
+	border: 1px solid black;
+	padding: 5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.ajax-showing-div-actions div:hover{
+	border: 1px solid #9D8787;
+	cursor: pointer;	
+	background-color: #1A1A1A;
+	color: #FFFFFF;
+}
+
+div.athlates-profile-back{
+	float: left;
+}
+
+div.unlock-profile-info{
+	float: right;	
+}
+
+
+
+div.clear{
+	clear: both;
 }

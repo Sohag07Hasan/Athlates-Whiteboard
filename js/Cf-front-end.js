@@ -80,7 +80,13 @@ jQuery(document).ready(function($){
 			var current_table_id = parent_table.attr('id');
 			var user_id = $(this).attr('user_id');
 			
+			//ajax showing div
+			var specific_div = $('div[post_id="'+post_id+'"]').filter('.ajax-showing-div');
+			var specific_actions_div = $('div[post_id="'+post_id+'"]').filter('.ajax-showing-div-actions');
 			
+			//unbinding some events
+			$('.athlates-profile-back').unbind('click');
+			$('.unlock-profile-info').unbind('click');
 			
 			
 			//ajax requesting
@@ -99,17 +105,13 @@ jQuery(document).ready(function($){
 				
 				success: function(result){
 					
-					//$('#' + current_table_id).addClass('hidden-entries');
-					var specific_div = $('div[post_id="'+post_id+'"]').filter('.ajax-showing-div');
+					$('#' + current_table_id).addClass('hidden-entries');					
 					 specific_div.html(result);
 					 specific_div.show();
-					
+					 specific_actions_div.show();
 					
 					//$('#colophon').html(result);
-					
-					//alert(result);
-					//	var new_tr = result.data;
-					//	table.find('tbody').append(new_tr);						
+													
 															
 				},
 				
@@ -118,6 +120,23 @@ jQuery(document).ready(function($){
 					alert(textStatus);
 					return false;
 				}
+				
+			});
+			
+			
+			//now if the back link is clicked
+			$('.athlates-profile-back').bind('click', function(){
+								
+				specific_div.hide();
+				specific_actions_div.hide();
+				specific_div.html(null);
+				$('#' + current_table_id).removeClass('hidden-entries');
+				
+			});
+			
+			
+			//if edit button is presssed
+			$('.unlock-profile-info').bind('click', function(){
 				
 			});
 			
