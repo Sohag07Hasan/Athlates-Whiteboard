@@ -44,10 +44,13 @@
 				<form class="ajax-profile-info-editing-form" post_id="<?php echo $post->ID; ?>" action="#" method="post" >
 					<table class="ajax-profile-info-editing-form-container">
 						<tbody>
+							
+						</tbody>
+						<tfoot>
 							<tr>
 								<td><input class="edit-from-submit-button" type="button" post_id="<?php echo $post_id; ?>" value="Edit Record"> <input class="edit-form-cancel" type="button" value="cancel"> </td>
 							</tr>
-						</tbody>
+						</tfoot>
 					</table>
 				</form>				
 							

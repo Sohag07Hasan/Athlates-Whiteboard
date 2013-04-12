@@ -114,7 +114,7 @@ jQuery(document).ready(function($){
 					
 					$('#' + current_table_id).addClass('hidden-entries');					
 					 specific_div.html(result.profile);
-					 specific_form.children('table.ajax-profile-info-editing-form-container').children('tbody').prepend(result.form);
+					 specific_form.children('table.ajax-profile-info-editing-form-container').children('tbody').html(result.form);
 					 specific_div.show();
 					 specific_actions_div.show();
 					
@@ -138,6 +138,7 @@ jQuery(document).ready(function($){
 				specific_div.hide();
 				specific_actions_div.hide();
 				specific_div.html(null);
+				children('table.ajax-profile-info-editing-form-container').children('tbody').html(null);
 				$('#' + current_table_id).removeClass('hidden-entries');
 				
 			});
@@ -192,11 +193,10 @@ jQuery(document).ready(function($){
 									
 					var result = jQuery.parseJSON(result);
 					
-					//jQuery('#site-generator').html(result.data);
-					
+					//jQuery('#site-generator').html(result.data);		
 				
-						var new_tr = result.data;
-						table.find('tbody').append(new_tr);	
+					var new_tr = result.data;
+					table.find('tbody').append(new_tr);	
 					
 					
 															
