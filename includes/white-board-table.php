@@ -39,6 +39,19 @@
 				</div>
 				<div class="clear"></div>
 				<div class="ajax-showing-div" post_id="<?php echo $post->ID; ?>"></div>
+				
+				<!-- form to update user information -->
+				<form class="ajax-profile-info-editing-form" post_id="<?php echo $post->ID; ?>" action="#" method="post" >
+					<table class="ajax-profile-info-editing-form-container">
+						<tbody>
+							<tr>
+								<td><input class="edit-from-submit-button" type="button" post_id="<?php echo $post_id; ?>" value="Edit Record"> <input class="edit-form-cancel" type="button" value="cancel"> </td>
+							</tr>
+						</tbody>
+					</table>
+				</form>				
+							
+							
 								
 								
 				<?php 

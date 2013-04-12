@@ -143,6 +143,10 @@ div.ajax-showing-div-actions{
 	display: none;
 }
 
+form.ajax-profile-info-editing-form{
+	display: none;
+}
+
 div.ajax-showing-div hr{
 	width: 100%;
 	margin: 0;

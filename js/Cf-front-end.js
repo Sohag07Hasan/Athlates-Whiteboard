@@ -84,10 +84,15 @@ jQuery(document).ready(function($){
 			var specific_div = $('div[post_id="'+post_id+'"]').filter('.ajax-showing-div');
 			var specific_actions_div = $('div[post_id="'+post_id+'"]').filter('.ajax-showing-div-actions');
 			
+			
+			//ajax info editing form
+			var specific_form = $('form[post_id="'+post_id+'"]').filter('.ajax-profile-info-editing-form');
+			
+			
 			//unbinding some events
 			$('.athlates-profile-back').unbind('click');
 			$('.unlock-profile-info').unbind('click');
-			
+						
 			
 			//ajax requesting
 			$.ajax({
@@ -105,8 +110,11 @@ jQuery(document).ready(function($){
 				
 				success: function(result){
 					
+					var result = jQuery.parseJSON(result);
+					
 					$('#' + current_table_id).addClass('hidden-entries');					
-					 specific_div.html(result);
+					 specific_div.html(result.profile);
+					 specific_form.children('table.ajax-profile-info-editing-form-container').children('tbody').prepend(result.form);
 					 specific_div.show();
 					 specific_actions_div.show();
 					
@@ -135,9 +143,19 @@ jQuery(document).ready(function($){
 			});
 			
 			
-			//if edit button is presssed
+			//if edit button is clicked
 			$('.unlock-profile-info').bind('click', function(){
+				specific_actions_div.hide();
+				specific_div.hide();
+				specific_form.show();
 				
+				//now if cancle is clicked
+				$('input.edit-form-cancel').unbind('click');
+				$('input.edit-form-cancel').bind('click', function(){
+					specific_form.hide();
+					specific_actions_div.show();
+					specific_div.show();
+				});
 			});
 			
 			
@@ -193,4 +211,6 @@ jQuery(document).ready(function($){
 		};
 		
 	});
+	
 });
+

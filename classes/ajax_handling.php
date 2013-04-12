@@ -34,6 +34,9 @@ class Athlates_whiteboard_ajax_handling{
 		
 		$url = get_option('siteurl');
 		
+		$return = array();
+			
+			ob_start();
 		?>
 				
 		<dl class="athlates-profile-viewing">
@@ -51,80 +54,73 @@ class Athlates_whiteboard_ajax_handling{
 				<?php endforeach; ?>							
 		</dl>
 				
-		
-		<form action="" method="post">
+		<?php 
+			$return['profile'] = ob_get_contents();
+			ob_end_clean();
 			
-			<?php 
-				foreach($board_data as $key => $b_data){
+			ob_start();
+		
+			foreach($board_data as $key => $b_data){
+				
+				if($b_data['class'] == $class_name){
+					$cell_spacing = count($data['component']) + 1;
 					
-					if($b_data['class'] == $class_name){
-						$cell_spacing = count($data['component']) + 1;
+					?>					
+						<tr> 
+							<td colspan="<?php echo $cell_spacing; ?>">
+								<h4>Email Adress</h4>
+								<input type="text" name="email" value="*****************" readonly />
+							</td>
+						</tr>
 						
-						?>
+						<tr>
+							<td colspan="<?php echo $cell_spacing; ?>">
+								<h4>Name</h4>
+								<input name="name" type="text" placeholder="Guest" value="<?php echo $athlate_name; ?>" />
+							</td>
+						</tr>
 						
-							<table>
-								<tr> 
-									<td colspan="<?php echo $cell_spacing; ?>">
-										<h4>Email Adress</h4>
-										<input type="text" name="email" value="*****************" readonly />
-									</td>
-								</tr>
-								
-								<tr>
-									<td colspan="<?php echo $cell_spacing; ?>">
-										<h4>Name</h4>
-										<input name="name" type="text" placeholder="Guest" value="<?php echo $athlate_name; ?>" />
-									</td>
-								</tr>
-								
-								<?php foreach($b_data['component'] as $key => $component) : ?>
-									<?php
-										if(isset($class_data['components'][$component['name']])){
-											$result = $class_data['components'][$component['name']]['result'];
-											$Rx = isset($class_data['components'][$component['name']]['Rx']) ? true : false;
-											$RxScale = $class_data['components'][$component['name']]['RxScale'];											
-										} 
-										else{
-											$result = '';
-											$Rx = false;
-											$RxScale = '';
-										}
-								 	?>
-								
-									<tr>
-										<td colspan="<?php echo $cell_spacing; ?>">
-											<h4><?php echo $component['name'];?></h4>
-											<p><input name="result[<?php echo $component['name']; ?>]" type="text" placeholder="what is your result?" value="<?php echo $result; ?>" > </p>
-											<p>
-																							
-												<span>
-													<input <?php checked($Rx); ?>  name="Rx[<?php echo $component['name']; ?>]" type="checkbox" value="" /> Rx
-												</span> 
-												<span style="margin: 0 20px 0 20px">or</span> 
-												<span>
-													<input name="RxScale[<?php echo $component['name']; ?>]" type="text" placeholder="How do you scale?" value="<?php echo $RxScale; ?>" />
-												</span> 												 
-												
-											</p>
-										</td>
-									</tr>									
-								<?php endforeach;?>
-								
-								<tr>
-									<td><input class="entry-from-submit-button" type="button" post_id="<?php echo $post_id; ?>" value="Edit Record"> <input class="cancel" type="button" value="cancel"> </td>
-								</tr>
-								
-							</table>
+						<?php foreach($b_data['component'] as $key => $component) : ?>
+							<?php
+								if(isset($class_data['components'][$component['name']])){
+									$result = $class_data['components'][$component['name']]['result'];
+									$Rx = isset($class_data['components'][$component['name']]['Rx']) ? true : false;
+									$RxScale = $class_data['components'][$component['name']]['RxScale'];											
+								} 
+								else{
+									$result = '';
+									$Rx = false;
+									$RxScale = '';
+								}
+						 	?>
 						
-						<?php 
-					}
+							<tr>
+								<td colspan="<?php echo $cell_spacing; ?>">
+									<h4><?php echo $component['name'];?></h4>
+									<p><input name="result[<?php echo $component['name']; ?>]" type="text" placeholder="what is your result?" value="<?php echo $result; ?>" > </p>
+									<p>
+																					
+										<span>
+											<input <?php checked($Rx); ?>  name="Rx[<?php echo $component['name']; ?>]" type="checkbox" value="" /> Rx
+										</span> 
+										<span style="margin: 0 20px 0 20px">or</span> 
+										<span>
+											<input name="RxScale[<?php echo $component['name']; ?>]" type="text" placeholder="How do you scale?" value="<?php echo $RxScale; ?>" />
+										</span> 												 
+										
+									</p>
+								</td>
+							</tr>									
+						<?php endforeach;?>					
+					
+					<?php 
 				}
-			?>
+			}
 			
-		</form>
+			$return['form'] = ob_get_contents();
+			ob_end_clean();
 		
-		
-		<?php 	
+			echo json_encode($return);
 		
 		exit;
 	}
