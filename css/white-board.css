@@ -136,4 +136,19 @@ Transitions are made
 /*ajax response showing like athlates contribution to the post and class */
 div.ajax-showing-div{
 	display: none;
+	text-align: center;
+}
+
+div.ajax-showing-div hr{
+	width: 100%;
+	margin: 0
+}
+
+
+dl.athlates-profile-viewing dt{
+	padding: 2px;
+}
+
+dl.athlates-profile-viewing dd{
+	margin: 0;
 }

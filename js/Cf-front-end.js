@@ -80,6 +80,9 @@ jQuery(document).ready(function($){
 			var current_table_id = parent_table.attr('id');
 			var user_id = $(this).attr('user_id');
 			
+			
+			
+			
 			//ajax requesting
 			$.ajax({
 				type: 'post',
@@ -95,7 +98,13 @@ jQuery(document).ready(function($){
 				},
 				
 				success: function(result){
-										
+					
+					//$('#' + current_table_id).addClass('hidden-entries');
+					var specific_div = $('div[post_id="'+post_id+'"]').filter('.ajax-showing-div');
+					 specific_div.html(result);
+					 specific_div.show();
+					
+					
 					//$('#colophon').html(result);
 					
 					//alert(result);

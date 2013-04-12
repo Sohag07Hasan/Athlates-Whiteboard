@@ -32,7 +32,7 @@
 				</table>
 								
 				<!--  some ajax elements are to be shown -->
-				<div class="ajax-showing-div" post_id="<?php echo $post_id; ?>"></div>
+				<div class="ajax-showing-div" post_id="<?php echo $post->ID; ?>"></div>
 								
 								
 				<?php 

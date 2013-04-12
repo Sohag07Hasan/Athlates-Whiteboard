@@ -29,9 +29,9 @@ class Athlates_whiteboard_ajax_handling{
 		
 		?>
 		
-		<dl>
+		<dl class="athlates-profile-viewing">
 			<dt> <?php echo $athlate_name; ?></dt>
-				
+				<hr />
 				
 				<?php foreach($class_data['components'] as $key => $com) : ?>
 					<dt> <?php echo $key; ?> </dt>
@@ -40,6 +40,7 @@ class Athlates_whiteboard_ajax_handling{
 							<span><?php echo ($com['Rx']) ? 'RX' : ''; ?></span>
 							<span><?php echo $com['RxScale']; ?></span>
 						</dd>
+						<hr />
 				<?php endforeach; ?>							
 		</dl>
 		
