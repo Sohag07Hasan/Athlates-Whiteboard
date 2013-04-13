@@ -197,6 +197,14 @@ jQuery(document).ready(function($){
 					specific_actions_div.show();
 					specific_div.show();
 				});
+				
+				
+				//now if cancle is clicked
+				$('input.edit-from-submit-button').unbind('click');
+				$('input.edit-from-submit-button').bind('click', function(){
+					alert('Implimentation is going on and will function soon');
+				});
+				
 			});
 			
 			
