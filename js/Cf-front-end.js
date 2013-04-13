@@ -173,46 +173,22 @@ jQuery(document).ready(function($){
 					
 					var email_pattern = /^(?!\.)[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g;
 					if(email_pattern.test(input_email)){
-						$.ajax({
-							type: 'post',
-							url: AthlatesAjax.ajaxurl,
-							cache: false,
-							timeout: 10000,
-							
-							data :{
-								action : 'athlates_email_verify',
-								email : input_email,
-								post_id : post_id,
-								user_id : user_id
-							},
-							
-							success: function(result){
-								alert(result);
-								/*
-								var result = jQuery.parseJSON(result);								
-								//jQuery('#site-generator').html(result.data);							
-								var new_tr = result.data;
-								table.find('tbody').append(new_tr);	
-								*/						
-																		
-							},					
-							
-							error: function(jqXHR, textStatus, errorThrown){
-								jQuery('#site-generator').html(textStatus);
-								alert(textStatus);
-								return false;
-							}
-						});
+						var presaved_email = specific_form.children('table.ajax-profile-info-editing-form-container').children('tbody').children('tr:first').find('input:first').attr('value');
+						if(presaved_email == input_email){
+							email_form.hide();
+							specific_form.show();
+						}
+						else{
+							var message = "Ooops! Email address did not match!";
+							email_form.find('p[class="email-veirfication-message"]').html(message);
+						}
 					}
-					else{
-						
+					else{						
 						var message = "Ooops! Invalid Email address";
 						email_form.find('p[class="email-veirfication-message"]').html(message);
 					}
 				});
-				
-				
-				//specific_form.show();
+												
 				
 				//now if cancle is clicked
 				$('input.edit-form-cancel').unbind('click');

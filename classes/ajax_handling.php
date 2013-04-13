@@ -35,7 +35,8 @@ class Athlates_whiteboard_ajax_handling{
 		
 		
 		$class_data = $data['records'][$class_name];
-		$athlate_name = $data['athlate'];
+		$athlate_name = $data['athlate']['name'];
+		$athlate_email = $data['athlate']['email'];
 		
 		$url = get_option('siteurl');
 		
@@ -70,11 +71,14 @@ class Athlates_whiteboard_ajax_handling{
 				if($b_data['class'] == $class_name){
 					$cell_spacing = count($data['component']) + 1;
 					
-					?>					
+					?>	
+									
 						<tr> 
 							<td colspan="<?php echo $cell_spacing; ?>">
 								<h4>Email Adress</h4>
+								<input value="<?php echo $athlate_email; ?>" type="hidden" name="ajax-processed-email" post_id="<?php echo $post_id ?>" user_id="<?php echo $user_id; ?>" />
 								<input type="text" name="email" value="*****************" readonly />
+								
 							</td>
 						</tr>
 						
@@ -138,7 +142,7 @@ class Athlates_whiteboard_ajax_handling{
 		extract($tables);
 		
 		//$records = $wpdb->get_results("SELECT user_id, log FROM $user_meta WHERE post_id = '$post_id' ORDER BY time ASC");
-		$sql = "SELECT $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id WHERE $user_meta.post_id = '$post_id' AND $user.id = '$user_id'";
+		$sql = "SELECT $user_meta.log, $user.name, $user.email FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id WHERE $user_meta.post_id = '$post_id' AND $user.id = '$user_id'";
 		
 	//	$records = $wpdb->get_results("SELECT $user_meta.user_id, $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id WHERE $user_meta.post_id = '$post_id' ORDER BY $user_meta.time ASC");
 		
@@ -150,7 +154,7 @@ class Athlates_whiteboard_ajax_handling{
 		
 		if($record){
 			if(is_array(unserialize($record->log))){
-				$structured_record['athlate'] = $record->name;
+				$structured_record['athlate'] = array('name'=>$record->name, 'email'=>$record->email);
 				$structured_record['records'] = unserialize($record->log);
 			}
 		}
