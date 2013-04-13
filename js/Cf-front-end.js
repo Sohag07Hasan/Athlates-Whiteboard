@@ -134,11 +134,11 @@ jQuery(document).ready(function($){
 			
 			//now if the back link is clicked
 			$('.athlates-profile-back').bind('click', function(){
-								
+				
 				specific_div.hide();
 				specific_actions_div.hide();
 				specific_div.html(null);
-				children('table.ajax-profile-info-editing-form-container').children('tbody').html(null);
+				specific_form.children('table.ajax-profile-info-editing-form-container').children('tbody').html(null);
 				$('#' + current_table_id).removeClass('hidden-entries');
 				
 			});
@@ -148,7 +148,71 @@ jQuery(document).ready(function($){
 			$('.unlock-profile-info').bind('click', function(){
 				specific_actions_div.hide();
 				specific_div.hide();
-				specific_form.show();
+				
+				//another little form pops up
+				var email_form = $('form[post_id="'+post_id+'"]').filter('.ajax-email-verify-form');
+				email_form.show();
+				
+				
+				var cancel_button = email_form.find('input[value="cancel"]');
+				var verify_button = email_form.find('input[value="verify"]');
+				
+				//cancel the verificaton process
+				cancel_button.unbind('click');
+				cancel_button.bind('click', function(){
+					email_form.hide();
+					specific_actions_div.show();
+					specific_div.show();
+				});
+				
+				
+				//if someone wants to verify the email
+				verify_button.unbind('click');
+				verify_button.bind('click', function(){
+					var input_email = email_form.find('input[name="ajax-email"]').val();
+					
+					var email_pattern = /^(?!\.)[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/g;
+					if(email_pattern.test(input_email)){
+						$.ajax({
+							type: 'post',
+							url: AthlatesAjax.ajaxurl,
+							cache: false,
+							timeout: 10000,
+							
+							data :{
+								action : 'athlates_email_verify',
+								email : input_email,
+								post_id : post_id,
+								user_id : user_id
+							},
+							
+							success: function(result){
+								alert(result);
+								/*
+								var result = jQuery.parseJSON(result);								
+								//jQuery('#site-generator').html(result.data);							
+								var new_tr = result.data;
+								table.find('tbody').append(new_tr);	
+								*/						
+																		
+							},					
+							
+							error: function(jqXHR, textStatus, errorThrown){
+								jQuery('#site-generator').html(textStatus);
+								alert(textStatus);
+								return false;
+							}
+						});
+					}
+					else{
+						
+						var message = "Ooops! Invalid Email address";
+						email_form.find('p[class="email-veirfication-message"]').html(message);
+					}
+				});
+				
+				
+				//specific_form.show();
 				
 				//now if cancle is clicked
 				$('input.edit-form-cancel').unbind('click');

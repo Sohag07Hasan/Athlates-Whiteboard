@@ -6,9 +6,14 @@
 class Athlates_whiteboard_ajax_handling{
 	
 	static function init(){
-		//ajax actions to add a record
+		//ajax actions to show an athlates contibutions for a specific class and posts
 		add_action('wp_ajax_athlates_contribution', array(get_class(), 'show_athlates_contribution'));
 		add_action('wp_ajax_nopriv_athlates_contribution', array(get_class(), 'show_athlates_contribution'));
+		
+		
+		//ajax actions to email verification
+		add_action('wp_ajax_athlates_email_verify', array(get_class(), 'athlates_email_verify'));
+		add_action('wp_ajax_nopriv_athlates_email_verify', array(get_class(), 'athlates_email_verify'));
 	}
 	
 	
@@ -154,5 +159,16 @@ class Athlates_whiteboard_ajax_handling{
 		return $structured_record;
 	}
 	
+	
+	
+	/* Email verificatio */
+	static function athlates_email_verify(){
+		$eamil = $_POST['email'];
+		$post_id = $_POST['post_id'];
+		$user_id = $_POST['user_id'];
+		
+		echo $user_id;
+		exit;
+	}
 	
 }

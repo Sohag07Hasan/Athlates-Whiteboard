@@ -147,6 +147,12 @@ form.ajax-profile-info-editing-form{
 	display: none;
 }
 
+form.ajax-email-verify-form{
+	display: none;
+	text-align: center;
+}
+
+
 div.ajax-showing-div hr{
 	width: 100%;
 	margin: 0;

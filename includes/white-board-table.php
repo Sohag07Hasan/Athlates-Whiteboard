@@ -54,7 +54,15 @@
 					</table>
 				</form>				
 							
-							
+				
+				<!-- another form to verify the email -->
+				<form class="ajax-email-verify-form" post_id="<?php echo $post->ID; ?>" action="#" method="post" >
+					<p> Your Email </p>
+					<p> <input size="30" type="text" name="ajax-email" value="" /> </p>
+					<p> <input type="button" value="verify" name="verify" /> <input name="cancel" type="button" value="cancel" /> </p>
+					<p class="email-veirfication-message"></p>
+				</form>	
+					
 								
 								
 				<?php 
