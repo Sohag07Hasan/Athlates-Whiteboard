@@ -199,10 +199,40 @@ jQuery(document).ready(function($){
 				});
 				
 				
-				//now if cancle is clicked
+				//now if the visitor wants to update his/here information
 				$('input.edit-from-submit-button').unbind('click');
 				$('input.edit-from-submit-button').bind('click', function(){
-					alert('Implimentation is going on and will function soon');
+					$.ajax({
+						type: 'post',
+						url: AthlatesAjax.ajaxurl,
+						cache: false,
+						timeout: 10000,
+						
+						data :{
+							action : 'athlates_records_updated',
+							form_data: specific_form.serializeArray()
+						},
+						
+						success: function(result){
+											
+						//	alert(result);
+							var result = jQuery.parseJSON(result);
+							
+							 specific_div.html(result.profile);
+							 specific_form.children('table.ajax-profile-info-editing-form-container').children('tbody').html(result.form);
+							 specific_form.hide();
+							 specific_div.show();
+							 specific_actions_div.show();		
+							 return false;		
+																	
+						},					
+						
+						error: function(jqXHR, textStatus, errorThrown){
+							jQuery('#site-generator').html(textStatus);
+							alert(textStatus);
+							return false;
+						}
+					});
 				});
 				
 			});

@@ -157,7 +157,7 @@
 											<p>
 																							
 												<span>
-													<input name="Rx[<?php echo $component['name']; ?>]" type="checkbox" value="" /> Rx
+													<input name="Rx[<?php echo $component['name']; ?>]" type="checkbox" value="on" /> Rx
 												</span> 
 												<span style="margin: 0 20px 0 20px">or</span> 
 												<span>
