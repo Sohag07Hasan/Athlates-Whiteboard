@@ -224,36 +224,26 @@ class Athlatics_Board_Admin{
 		
 		if($post->post_type == 'post') :
 			$board = array();
-			if(count($_POST['ahtlates-white-board-class-names']) > 0):
-				foreach($_POST['ahtlates-white-board-class-names'] as $classkey => $classname){
+			if(count($_POST['class-names']) > 0):
+			
+				$sanitized_key = 0;
+			
+				foreach($_POST['class-names'] as $classkey => $classname){
 					if(empty($classname)) continue;
-					$board[$classkey]['class'] = $classname;
 					
-					//component 1
-					if(!empty($_POST['ahtlates-white-board-component-names-1'][$classkey])){
-						$comname = $_POST['ahtlates-white-board-component-names-1'][$classkey];
-						$comdes = $_POST['ahtlates-white-board-component-descriptions-1'][$classkey];
-						$board[$classkey]['component'][] = array('name'=>$comname, 'des'=>$comdes);
+					
+					$board[$sanitized_key]['class'] = $classname;
+					
+					foreach($_POST['component-names'][$classkey] as $comkey => $component){
+						if(empty($component)) continue;
+						$description = $_POST['component-descriptions'][$classkey][$comkey];
+						$board[$sanitized_key]['component'][] = array('name'=>$component, 'des'=>$description);
 					}
 					
-					//component 2
-					if(!empty($_POST['ahtlates-white-board-component-names-2'][$classkey])){
-							$comname = $_POST['ahtlates-white-board-component-names-2'][$classkey];
-							$comdes = $_POST['ahtlates-white-board-component-descriptions-2'][$classkey];
-							$board[$classkey]['component'][] = array('name'=>$comname, 'des'=>$comdes);
-					}
-	
-					//component 3
-					if(!empty($_POST['ahtlates-white-board-component-names-3'][$classkey])){
-							$comname = $_POST['ahtlates-white-board-component-names-3'][$classkey];
-							$comdes = $_POST['ahtlates-white-board-component-descriptions-3'][$classkey];
-							$board[$classkey]['component'][] = array('name'=>$comname, 'des'=>$comdes);
-					}
-					
-					//var_dump($board[$classkey]);
+					$sanitized_key++;					
 				}
 			endif;	
-			
+				
 			update_post_meta($post_ID, 'Athlates_White_Board', $board);
 			
 		endif;

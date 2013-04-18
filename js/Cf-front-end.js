@@ -72,7 +72,7 @@ jQuery(document).ready(function($){
 		/*
 		 *  when someone clicks more to show the athlates contribution
 		 * */
-		$('td.whiteboard-more').bind('click', function(){
+		$('td.whiteboard-more').live('click', function(){
 						
 			var parent_table = $(this).parents('table');
 			var class_name = parent_table.attr('class_name');
