@@ -186,18 +186,8 @@ class Athlatics_Board_Admin{
 	//field extender
 	static function include_js(){	
 		wp_enqueue_script('jquery');
-		
-		/*
 		wp_register_script('athlates_board_form_field_extender_jquery', ATHLATESWHITEBOARD_URL . 'asset/jquery.multiFieldExtender-2.0.js', array('jquery'));
 		wp_enqueue_script('athlates_board_form_field_extender_jquery');
-		*/
-		
-		wp_register_script('athlates_board_form_field_extender_jquery', ATHLATESWHITEBOARD_URL . 'js/admin-form-extender.js', array('jquery'));
-		wp_enqueue_script('athlates_board_form_field_extender_jquery');
-		
-		
-		wp_register_style('athlates-board-white-board-metabaox', ATHLATESWHITEBOARD_URL . 'css/metabox.css');
-		wp_enqueue_style('athlates-board-white-board-metabaox');
 		
 	}
 	

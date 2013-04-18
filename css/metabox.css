@@ -1,0 +1,118 @@
+/*
+		.removeFields
+		{
+				color:red;
+		}
+		.addMoreFields
+		{
+				color:green;
+		}		
+		
+		a {
+				color: black;
+		}
+		a:hover {
+				color: maroon;
+		}
+		.divTag {
+				float: right;
+				width: 100px;
+		}
+
+		.Birds
+		{    
+				margin:5px;
+		}
+
+		.imgBird
+		{
+				border:1px solid #ccc;
+				padding:2px;
+				width:240px;
+		}
+
+		.addImage
+		{
+				background: url(add.png) no-repeat 0px 1px;
+				padding-left: 17px;    
+				margin-bottom: 10px;    
+				line-height:20px;
+				clear:both:
+						
+		}
+		.removeImage
+		{
+				background: url(delete.png) no-repeat 0px 1px;
+				padding-left: 17px;    
+				margin-bottom: 10px;    
+				line-height:20px;
+		}
+		*/
+
+.athlates-white-board-parent-class{
+	padding: 10px;
+	border: 1px solid #7F7F7F;
+	margin-bottom: 10px;	
+	/*text-align: center;*/
+}
+
+.addresponder-with-email-templates-class span{
+	padding-right: 30px;
+}
+
+.addresponder-with-email-templates-class select{
+	background: transparent;
+  /*  width: 268px; */
+    padding: 5px;
+    font-size: 13px;
+    border: 1px solid #ccc; 
+    height: 30px;
+}
+
+.reponder-type{
+	width: 150px;
+}				
+
+.responder-template{
+	 width: 268px;
+}
+
+.responder-digit{
+	width: 70px;
+}
+
+.responder_cform{
+	background: transparent;
+    width: 268px;
+    padding: 5px;
+    font-size: 13px;
+    border: 1px solid #ccc; 
+    height: 30px;
+}
+
+.respond-select-guide{
+	margin-right: 268px;
+	padding: 10px;
+}
+
+.board-class-name{
+	background: transparent;
+	padding: 2px;
+    font-size: 17px;		  
+  }
+
+ .add-remove-action, .add-remove-classes{
+	font-size: 15px;
+ }
+ 
+.add-remove-action span, .add-remove-classes span{
+	cursor: pointer;
+ }
+ 
+ .add-remove-action span.remove-component, .add-remove-classes span.remove-class{
+	color: #A52A2A;
+ }
+ 
+.add-remove-action span.add-component, .add-remove-classes span.add-class{
+	color:#2828D5;
+ }
