@@ -23,6 +23,11 @@ class Athlates_whiteboard_ajax_handling{
 		//visitors profiles are updated
 		add_action('wp_ajax_athlates_records_updated', array(get_class(), 'athlates_records_updated'));
 		add_action('wp_ajax_nopriv_athlates_records_updated', array(get_class(), 'athlates_records_updated'));
+		
+		
+		//athlete's directory
+		add_shortcode('athletes_directory', array(get_class(), 'athletes_directory'));
+		
 	}
 	
 	
@@ -254,6 +259,12 @@ class Athlates_whiteboard_ajax_handling{
 		
 		echo $user_id;
 		exit;
+	}
+	
+
+	/*Athletes directory*/
+	static function athletes_directory(){
+			
 	}
 	
 }

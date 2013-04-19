@@ -24,7 +24,10 @@ class Athlatics_Board_Admin{
 		//ajax actions to add a record
 		add_action('wp_ajax_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
 		add_action('wp_ajax_nopriv_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
-				
+		
+		
+		//athletes page designing
+		add_action('admin_menu', array(get_class(), 'admin_menu'));				
 		
 	}
 	
@@ -349,4 +352,35 @@ class Athlatics_Board_Admin{
 			'user_meta' => $wpdb->prefix . 'athlate_meta'
 		);
 	}
+	
+	
+	
+	//admin menu
+	static function admin_menu(){
+		add_options_page( 'athletes profile page', 'Athletes', 'manage_options', 'athletes_profile_info', array(get_class(), 'athletes_page'));
+	}
+	
+	
+	//athletes page designing
+	static function athletes_page(){
+		
+		/*saving the form submitted data*/
+		if($_POST['athletes-page-selection-table-submit'] == 'Y'){
+			if(update_option('whiteboard_athlates_page', $_POST['athlete-page']));
+		}
+		
+		$athlates_page = get_option('whiteboard_athlates_page');
+		
+		$pages = self::get_pages();		
+		include ATHLATESWHITEBOARD_DIR . '/includes/options-page.php';
+	}
+	
+	//return all the pages
+	static function get_pages(){
+		global $wpdb;
+		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = 'page' AND post_status = 'publish'";
+		
+		return $wpdb->get_results($sql);
+	}
+	
 }
