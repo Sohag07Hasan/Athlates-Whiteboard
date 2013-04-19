@@ -270,6 +270,10 @@ class Athlates_whiteboard_ajax_handling{
 		$tables = Athlatics_Board_Admin::get_tables();
 		extract($tables);
 		
+		if(isset($_GET['id'])){
+			$athlate_id = (int) $_GET['id'];			
+			if($athlate_id > 0) return self::show_an_athlate($athlate_id);
+		}
 		
 		
 		$sql = "SELECT $user_meta.post_id, $user_meta.user_id, $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id ORDER BY $user.name";
@@ -298,6 +302,32 @@ class Athlates_whiteboard_ajax_handling{
 		
 		return $content;
 	}
+	
+	
+	/*
+	 * Showing an individual athlate
+	 * */
+	static function show_an_athlate($athlate_id){
+		global $wpdb;
+		$tables = Athlatics_Board_Admin::get_tables();
+		extract($tables);
+		
+		$athlate_info = $wpdb->get_row("SELECT name FROM $user WHERE id = '$athlate_id'");
+		
+		$sql = "SELECT post_id, log FROM $user_meta WHERE user_id = '$athlate_id' ORDER BY post_id";
+		
+		$records = $wpdb->get_results($sql);
+		
+		ob_start();
+		include ATHLATESWHITEBOARD_DIR . '/includes/single-athlate-profile.php';
+		$content = ob_get_contents();
+		ob_end_clean();
+
+		return $content;
+		
+	}
+	
+	
 	
 	
 	//get time interval
