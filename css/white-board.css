@@ -206,3 +206,24 @@ div.unlock-profile-info{
 div.clear{
 	clear: both;
 }
+
+
+/* Athletes profile viewsing */
+table.athletes-directory tr.odd{
+	background-color: #9CC2CE;
+}
+
+table.athletes-directory{
+	border: none;
+}
+
+table.athletes-directory td{
+	border: none;
+}
+
+
+table.athletes-directory td, table.athletes-directory th{
+	padding: 10px;
+	/*text-align: center;*/
+}
+

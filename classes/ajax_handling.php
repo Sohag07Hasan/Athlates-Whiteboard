@@ -264,7 +264,83 @@ class Athlates_whiteboard_ajax_handling{
 
 	/*Athletes directory*/
 	static function athletes_directory(){
-			
+		
+		global $wpdb, $post;
+		
+		$tables = Athlatics_Board_Admin::get_tables();
+		extract($tables);
+		
+		
+		
+		$sql = "SELECT $user_meta.post_id, $user_meta.user_id, $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id ORDER BY $user.name";
+		
+		//var_dump($sql);
+		$raw_athlates = $wpdb->get_results($sql);
+		$athlates = array();
+		
+		if($raw_athlates){
+			foreach($raw_athlates as $rath){
+				$log = unserialize($rath->log);
+				$athlates[$rath->user_id]['name'] = $rath->name;				
+				foreach($log as $cn => $value){
+					$athlates[$rath->user_id]['time'][] = $value['log_time'];
+					$athlates[$rath->user_id]['classes'][$cn] = $value;					
+				}
+								
+			}
+		}
+		
+		
+		ob_start();
+		include ATHLATESWHITEBOARD_DIR . '/includes/athletes-directory.php';
+		$content = ob_get_contents();	
+		ob_end_clean();
+		
+		return $content;
 	}
+	
+	
+	//get time interval
+	static function get_interval($now, $post_time){
+		$datetime1 = new DateTime();
+		$datetime1->setTimestamp($now);
+		
+		$datetime2 = new DateTime();
+		$datetime2->setTimestamp($post_time);
+		
+		$interval = $datetime1->diff($datetime2);
+			
+		$years = ($interval->y > 0) ? $interval->y . ' years ' : '';
+		$months = ($interval->m > 0) ? $interval->m . ' months ' : '';
+		$days = ($interval->d > 0) ? $interval->d . ' days ' : '';
+		$hours = ($interval->h > 0) ? $interval->h . ' hours ' : '';
+		$minutes = ($interval->i > 0) ? $interval->i . ' minutes ' : '';
+		
+		$string = '';
+		
+		if($interval->y > 0){
+			$string .= $interval->y . ' years ago';
+		}
+		elseif($interval->m > 0){
+			$string .= $interval->m . ' months ago';
+		}
+		elseif($interval->d > 0){
+			$string .= $interval->d . ' days ago';
+		}
+		elseif($interval->h > 0){
+			$string .= $interval->h . ' hours ago';
+		}
+		elseif($interval->i > 0){
+			$string .= $interval->i . ' minutes ago';
+		}
+		else{
+			$string .= 'now';
+		}
+		
+		return $string;
+		
+		
+	}
+		
 	
 }
