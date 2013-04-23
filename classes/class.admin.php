@@ -23,50 +23,33 @@ class Athlatics_Board_Admin{
 		
 		//athletes page designing
 		add_action('admin_menu', array(get_class(), 'admin_menu'));	
-
 		
-		//ajax actions to put metabox data to the posts content
-		add_action('wp_ajax_metabox_to_post', array(get_class(), 'metabox_to_post'));
-		
-	}
-	
-	
-	
-	/* ajax to put metabox to post */
-	static function metabox_to_post(){
-		$data = array();
-		$inputs = $_POST['inputs'];
-		$textareas = $_POST['textareas'];
-		
-		var_dump($textareas); die();
-		
-		/*
-		foreach($inputs as $input){
-			$data[$input['name']] = $input['value'];
-		}
-		*/
-		
-		foreach($textareas as $area){
-			$data[$area['name']] = $area['value'];
-		}
-		
-		var_dump($data);
-		exit;
+		//tiny mc
+		add_filter("mce_external_plugins", array(get_class(), "register_tinymce_plugin"));
+		add_filter('mce_buttons', array(get_class(), 'add_tinymce_button'));
 		
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	//tinymce button with functionality
+	static function register_tinymce_plugin($plugin_array){
+		if(current_user_can('edit_posts')){
+			$plugin_array['whiteboard_button'] = ATHLATESWHITEBOARD_URL . 'js/tinymce.js';
+		}
+    	return $plugin_array;
+	}
 	
 		
+	static function add_tinymce_button($buttons){
+		if(current_user_can('edit_posts')){
+			$buttons[] = 'whiteboard_button';
+		}
+		
+		return $buttons;
+	}
+	
+	
+	
 	
 	//metabox creation
 	static function custom_metaboxes(){

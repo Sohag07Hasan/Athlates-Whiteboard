@@ -55,6 +55,8 @@ jQuery(document).ready(function($){
 	});
 	
 	
+	
+	//tiny mce functionality
 	$('#metabox-to-post').unbind('click');
 	$('#metabox-to-post').live('click', function(){
 		var parent_wrap = $(this).parents('div#metabox-to-post-holder');
