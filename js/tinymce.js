@@ -15,7 +15,7 @@ jQuery(document).ready(function($) {
                 });
 
             // Register buttons - trigger above command when clicked
-            ed.addButton('whiteboard_button', {title : 'Insert Whiteboard', cmd : 'insert_metabox', image: 'http://localhost/wordpress/wp-content/plugins/athlatics-board' + '/images/cfwhiteboard.png' });
+            ed.addButton('whiteboard_button', {title : 'Insert Whiteboard', cmd : 'insert_metabox', image: get_image() });
         }  
     });
 
@@ -56,6 +56,12 @@ jQuery(document).ready(function($) {
 		
 		str += '</p>';
 		return str;
+    };
+    
+    
+    //return the image url
+    var get_image = function(){
+    	return $('input#whiteboard-tinymce-button').val();
     };
     
 });

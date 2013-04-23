@@ -7,6 +7,8 @@
 
 <div class='wrap' id="metabox-to-post-holder" />
 	
+	<input type="hidden" id="whiteboard-tinymce-button" value="<?php echo ATHLATESWHITEBOARD_URL . 'images/cfw-mce-button-130113.png'; ?>" />
+		
 	<h4>Manage Athlates WhiteBoard</h4>
 	
 	<p><input type="button" id="metabox-to-post" value="metabox-to-post" class="button-primary" /></p>
