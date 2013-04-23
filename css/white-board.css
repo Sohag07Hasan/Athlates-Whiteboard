@@ -227,3 +227,28 @@ table.athletes-directory td, table.athletes-directory th{
 	/*text-align: center;*/
 }
 
+
+/* Single profile page */
+time.date-time{
+	float: left;
+	padding: 15px;
+}
+
+div.class-description{
+	float: left;
+	padding: 15px;
+}
+
+div.class-description span.class-name{
+	font-size: 17px;
+	padding-right: 10px;
+}
+
+div.class-description span.blog-post-link a{
+	color: #4D4D4D;
+	font-style: italic;
+}
+
+div.athlete-profile{
+	border-bottom: 1px solid #4D4D4D;
+}

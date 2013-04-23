@@ -274,9 +274,13 @@ class Athlates_whiteboard_ajax_handling{
 			$athlate_id = (int) $_GET['id'];			
 			if($athlate_id > 0) return self::show_an_athlate($athlate_id);
 		}
+
+		//doing some pagination
 		
 		
 		$sql = "SELECT $user_meta.post_id, $user_meta.user_id, $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id ORDER BY $user.name";
+		
+		
 		
 		//var_dump($sql);
 		$raw_athlates = $wpdb->get_results($sql);
@@ -314,9 +318,26 @@ class Athlates_whiteboard_ajax_handling{
 		
 		$athlate_info = $wpdb->get_row("SELECT name FROM $user WHERE id = '$athlate_id'");
 		
-		$sql = "SELECT post_id, log FROM $user_meta WHERE user_id = '$athlate_id' ORDER BY post_id";
+		$sql = "SELECT post_id, log FROM $user_meta WHERE user_id = '$athlate_id' ORDER BY post_id DESC";
 		
 		$records = $wpdb->get_results($sql);
+		
+		//var_dump($records);
+		
+		$sanitized_data = array();
+		
+		foreach ($records as $r){
+			$rd = unserialize($r->log);
+			foreach($rd as $key => $rz){
+				$sanitized_data[$rz['log_time']][] = array(
+					'class' => $key,
+					'components' => $rz['components'],
+					'post_id' => $r->post_id
+				);
+			}
+		}
+
+		krsort($sanitized_data);
 		
 		ob_start();
 		include ATHLATESWHITEBOARD_DIR . '/includes/single-athlate-profile.php';
