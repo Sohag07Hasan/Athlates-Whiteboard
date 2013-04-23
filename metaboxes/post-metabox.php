@@ -23,7 +23,7 @@
 			 <div class="athlates-white-board-parent-class">
 			 	<p class="board-class-name"> Class Name <input class="ahlete-class" size="50" type="text" name="class-names[<?php echo $key; ?>]" value="<?php echo $data['class']; ?>" ></p>
 				
-				<table id="metabox-to-post-table">
+				<table class="component-holder-table">
 					
 					<tr>
 						<td>&nbsp</td>
@@ -39,8 +39,8 @@
 								
 								<tr>
 									<td>Component </td>
-									<td><input type="text" name="component-names[<?php echo $key; ?>][]" value="<?php echo $component['name'] ?>" /></td>
-									<td><textarea rows="2" cols="50" name="component-descriptions[<?php echo $key; ?>][]"><?php echo $component['des']; ?></textarea></td>
+									<td><input class="class-component" type="text" name="component-names[<?php echo $key; ?>][]" value="<?php echo $component['name'] ?>" /></td>
+									<td><textarea class="component-description" rows="2" cols="50" name="component-descriptions[<?php echo $key; ?>][]"><?php echo $component['des']; ?></textarea></td>
 									<td class="add-remove-action"> <span class="remove-component">Remove</span></td>
 								</tr>
 								
@@ -51,8 +51,8 @@
 						
 								<tr>
 									<td>Component </td>
-									<td><input type="text" name="component-names[<?php echo $key; ?>][]" value="" /></td>
-									<td><textarea rows="2" cols="50" name="component-descriptions[<?php echo $key; ?>][]"></textarea></td>
+									<td><input class="class-component" type="text" name="component-names[<?php echo $key; ?>][]" value="" /></td>
+									<td><textarea class="component-description" rows="2" cols="50" name="component-descriptions[<?php echo $key; ?>][]"></textarea></td>
 									<td class="add-remove-action" key="<?php echo $key; ?>" > <span class="remove-component">Remove</span> &nbsp; &nbsp;<span class="add-component">Add New</span> </td>
 								</tr>
 										
@@ -68,9 +68,9 @@
 	 ?>
 		
 		<div class="athlates-white-board-parent-class">
-				 	<p class="board-class-name"> Class Name <input size="50" type="text" recname="cllassname" name="class-names[<?php echo $key+1; ?>]" value="" ></p>
+				 	<p class="board-class-name"> Class Name <input class="ahlete-class" size="50" type="text" name="class-names[<?php echo $key+1; ?>]" value="" ></p>
 					
-					<table>
+					<table class="component-holder-table">
 						
 						<tr>
 							<td>&nbsp</td>
@@ -79,8 +79,8 @@
 						</tr>
 						<tr>
 							<td>Component</td>
-							<td><input type="text" name="component-names[<?php echo $key+1; ?>][]" value="" /></td>
-							<td><textarea rows="2" cols="50" name="component-descriptions[<?php echo $key+1; ?>][]"></textarea></td>
+							<td><input class="class-component" type="text" name="component-names[<?php echo $key+1; ?>][]" value="" /></td>
+							<td><textarea class="component-description" rows="2" cols="50" name="component-descriptions[<?php echo $key+1; ?>][]"></textarea></td>
 							<td class="add-remove-action" key="<?php echo $key+1; ?>" > <span class="remove-component">Remove</span> &nbsp; &nbsp;<span class="add-component">Add New</span> </td>
 						</tr>
 											
