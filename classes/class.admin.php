@@ -22,9 +22,50 @@ class Athlatics_Board_Admin{
 		register_activation_hook(ATHLATESWHITEBOARD_FILE, array(get_class(), 'activate_the_plugin'));		
 		
 		//athletes page designing
-		add_action('admin_menu', array(get_class(), 'admin_menu'));				
+		add_action('admin_menu', array(get_class(), 'admin_menu'));	
+
+		
+		//ajax actions to put metabox data to the posts content
+		add_action('wp_ajax_metabox_to_post', array(get_class(), 'metabox_to_post'));
 		
 	}
+	
+	
+	
+	/* ajax to put metabox to post */
+	static function metabox_to_post(){
+		$data = array();
+		$inputs = $_POST['inputs'];
+		$textareas = $_POST['textareas'];
+		
+		var_dump($textareas); die();
+		
+		/*
+		foreach($inputs as $input){
+			$data[$input['name']] = $input['value'];
+		}
+		*/
+		
+		foreach($textareas as $area){
+			$data[$area['name']] = $area['value'];
+		}
+		
+		var_dump($data);
+		exit;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		
 	
 	//metabox creation
@@ -52,14 +93,13 @@ class Athlatics_Board_Admin{
 	static function include_js(){	
 		wp_enqueue_script('jquery');
 		
-		/*
-		wp_register_script('athlates_board_form_field_extender_jquery', ATHLATESWHITEBOARD_URL . 'asset/jquery.multiFieldExtender-2.0.js', array('jquery'));
-		wp_enqueue_script('athlates_board_form_field_extender_jquery');
-		*/
 		
 		wp_register_script('athlates_board_form_field_extender_jquery', ATHLATESWHITEBOARD_URL . 'js/admin-form-extender.js', array('jquery'));
 		wp_enqueue_script('athlates_board_form_field_extender_jquery');
 		
+		wp_localize_script('athlates_board_form_field_extender_jquery', 'AthlatesAjaxAdmin', array( 
+					'ajaxurl' => admin_url( 'admin-ajax.php' )
+		));
 		
 		wp_register_style('athlates-board-white-board-metabaox', ATHLATESWHITEBOARD_URL . 'css/metabox.css');
 		wp_enqueue_style('athlates-board-white-board-metabaox');

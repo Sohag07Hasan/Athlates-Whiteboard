@@ -54,4 +54,60 @@ jQuery(document).ready(function($){
 		
 	});
 	
+	
+	
+	//metabox to posts
+	$('#metabox-to-post').unbind('click');
+	$('#metabox-to-post').bind('click', function(){
+		
+		alert('under construction');
+		return false;
+		
+		var parent_wrap = $(this).parents('div#metabox-to-post-holder');
+		//var inputs = parent_wrap.find('input[type="text"]');
+		var inputs = parent_wrap.find('input[type="text"]').serializeArray();
+		var textareas = parent_wrap.find('textarea').serializeArray();
+		
+		
+		
+		$.ajax({
+			type: 'post',
+			url: AthlatesAjaxAdmin.ajaxurl,
+			cache: false,
+			timeout: 10000,
+			
+			data :{
+				action: 'metabox_to_post',
+				inputs: inputs,
+				textareas: textareas
+			},
+			
+			success: function(result){
+				
+			//	var result = jQuery.parseJSON(result);
+				$('#wpfooter').html(result);
+												
+														
+			},
+			
+			error: function(jqXHR, textStatus, errorThrown){
+				jQuery('#site-generator').html(textStatus);
+				alert(textStatus);
+				return false;
+			}
+			
+		});	
+		
+		/*
+		for(i=0; i<inputs.length; i++){
+			var name = inputs.eq(i).attr('name');
+			var value = inputs.eq(i).attr('value');
+			
+			check[] = [name, value];
+		}
+		
+		$('#wpfooter').html(jsoncheck);
+		*/
+	});
+	
 });

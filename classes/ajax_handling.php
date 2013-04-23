@@ -433,6 +433,26 @@ class Athlates_whiteboard_ajax_handling{
 		$class_name = $new_data['class_name'];
 		$name = $new_data['name'];
 		$email = $new_data['email'];
+		
+		if(empty($email) || empty($name)){
+			$return_array = array(
+				'is_error' => true,
+				'message' => 'Email and Name fields are mendatory'
+			);
+			
+			echo json_encode($return_array);
+			exit;
+		}
+		
+		if(!is_email($email)){
+			$return_array = array(
+				'is_error' => true,
+				'message' => 'Invalid Email address!'
+			);
+			
+			echo json_encode($return_array);
+			exit;	
+		}
 			
 		//get the user id
 		$user_info = self::register_new_athlate($name, $email);
