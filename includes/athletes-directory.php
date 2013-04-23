@@ -15,7 +15,7 @@
 				<?php 
 					$counter = 1;
 					foreach ($athlates as $athlate_id => $athlate){
-						$directory = $link . '?id=' . $athlate_id;
+						$directory = add_query_arg('id', $athlate_id, $link);
 						
 						$tr_class = (fmod($counter, 2) > 0) ? 'odd' : 'even';
 						$counter ++;						
@@ -34,6 +34,21 @@
 			</tbody>
 			
 		</table>
+				
+		<ul class="athletes-pagination">
+			<?php 
+				for($i = 0; $i < $total_page; $i++){
+					$j = $i + 1;
+					$ap_link = add_query_arg('ap', $i, $link);
+					$active_class = ($cur_page == $i) ? 'active' : '';
+					?>
+					<li class="<?php echo $active_class; ?>"> <a href="<?php echo $ap_link; ?>"> <?php echo $j; ?> </a> </li>
+					<?php 
+				}
+			?>		
+		</ul>
+		
 		<?php 
+		
 	}
 ?>

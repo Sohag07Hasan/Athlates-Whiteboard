@@ -276,12 +276,16 @@ class Athlates_whiteboard_ajax_handling{
 		}
 
 		//doing some pagination
+		$total_athlete = (int) $wpdb->get_var("SELECT COUNT(id) FROM $user");
+		$per_page = 30;		
+		$total_page = ceil($total_athlete/$per_page);
 		
 		
-		$sql = "SELECT $user_meta.post_id, $user_meta.user_id, $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id ORDER BY $user.name";
+		$cur_page = ($_GET['ap'] > 0) ? $_GET['ap'] : 0;
+		$offset = (int) $per_page * $cur_page;
 		
-		
-		
+		$sql = "SELECT $user_meta.post_id, $user_meta.user_id, $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id ORDER BY $user.name LIMIT $per_page OFFSET $offset";
+				
 		//var_dump($sql);
 		$raw_athlates = $wpdb->get_results($sql);
 		$athlates = array();

@@ -252,3 +252,26 @@ div.class-description span.blog-post-link a{
 div.athlete-profile{
 	border-bottom: 1px solid #4D4D4D;
 }
+
+
+/*
+athlates directory paginaion
+*/
+ul.athletes-pagination{
+	padding: 15px;
+}
+
+ul.athletes-pagination li{
+	display: inline;
+	padding: 3px;	
+}
+
+ul.athletes-pagination li.active{
+	background-color: #BFBFBF;
+	color: #1A1A1A;
+	cursor: default;
+}
+
+ul.athletes-pagination li a{
+	padding: 4px;
+}
