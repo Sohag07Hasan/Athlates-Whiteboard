@@ -263,15 +263,11 @@ ul.athletes-pagination{
 
 ul.athletes-pagination li{
 	display: inline;
-	padding: 3px;	
 }
 
 ul.athletes-pagination li.active{
 	background-color: #BFBFBF;
 	color: #1A1A1A;
 	cursor: default;
-}
-
-ul.athletes-pagination li a{
-	padding: 4px;
+	padding: 0 4px 0 4px;
 }
