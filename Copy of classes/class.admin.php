@@ -24,7 +24,10 @@ class Athlatics_Board_Admin{
 		//ajax actions to add a record
 		add_action('wp_ajax_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
 		add_action('wp_ajax_nopriv_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
-				
+		
+		
+		//athletes page designing
+		add_action('admin_menu', array(get_class(), 'admin_menu'));				
 		
 	}
 	
@@ -186,8 +189,18 @@ class Athlatics_Board_Admin{
 	//field extender
 	static function include_js(){	
 		wp_enqueue_script('jquery');
+		
+		/*
 		wp_register_script('athlates_board_form_field_extender_jquery', ATHLATESWHITEBOARD_URL . 'asset/jquery.multiFieldExtender-2.0.js', array('jquery'));
 		wp_enqueue_script('athlates_board_form_field_extender_jquery');
+		*/
+		
+		wp_register_script('athlates_board_form_field_extender_jquery', ATHLATESWHITEBOARD_URL . 'js/admin-form-extender.js', array('jquery'));
+		wp_enqueue_script('athlates_board_form_field_extender_jquery');
+		
+		
+		wp_register_style('athlates-board-white-board-metabaox', ATHLATESWHITEBOARD_URL . 'css/metabox.css');
+		wp_enqueue_style('athlates-board-white-board-metabaox');
 		
 	}
 	
@@ -214,36 +227,26 @@ class Athlatics_Board_Admin{
 		
 		if($post->post_type == 'post') :
 			$board = array();
-			if(count($_POST['ahtlates-white-board-class-names']) > 0):
-				foreach($_POST['ahtlates-white-board-class-names'] as $classkey => $classname){
+			if(count($_POST['class-names']) > 0):
+			
+				$sanitized_key = 0;
+			
+				foreach($_POST['class-names'] as $classkey => $classname){
 					if(empty($classname)) continue;
-					$board[$classkey]['class'] = $classname;
 					
-					//component 1
-					if(!empty($_POST['ahtlates-white-board-component-names-1'][$classkey])){
-						$comname = $_POST['ahtlates-white-board-component-names-1'][$classkey];
-						$comdes = $_POST['ahtlates-white-board-component-descriptions-1'][$classkey];
-						$board[$classkey]['component'][] = array('name'=>$comname, 'des'=>$comdes);
+					
+					$board[$sanitized_key]['class'] = $classname;
+					
+					foreach($_POST['component-names'][$classkey] as $comkey => $component){
+						if(empty($component)) continue;
+						$description = $_POST['component-descriptions'][$classkey][$comkey];
+						$board[$sanitized_key]['component'][] = array('name'=>$component, 'des'=>$description);
 					}
 					
-					//component 2
-					if(!empty($_POST['ahtlates-white-board-component-names-2'][$classkey])){
-							$comname = $_POST['ahtlates-white-board-component-names-2'][$classkey];
-							$comdes = $_POST['ahtlates-white-board-component-descriptions-2'][$classkey];
-							$board[$classkey]['component'][] = array('name'=>$comname, 'des'=>$comdes);
-					}
-	
-					//component 3
-					if(!empty($_POST['ahtlates-white-board-component-names-3'][$classkey])){
-							$comname = $_POST['ahtlates-white-board-component-names-3'][$classkey];
-							$comdes = $_POST['ahtlates-white-board-component-descriptions-3'][$classkey];
-							$board[$classkey]['component'][] = array('name'=>$comname, 'des'=>$comdes);
-					}
-					
-					//var_dump($board[$classkey]);
+					$sanitized_key++;					
 				}
 			endif;	
-			
+				
 			update_post_meta($post_ID, 'Athlates_White_Board', $board);
 			
 		endif;
@@ -349,4 +352,35 @@ class Athlatics_Board_Admin{
 			'user_meta' => $wpdb->prefix . 'athlate_meta'
 		);
 	}
+	
+	
+	
+	//admin menu
+	static function admin_menu(){
+		add_options_page( 'athletes profile page', 'Athletes', 'manage_options', 'athletes_profile_info', array(get_class(), 'athletes_page'));
+	}
+	
+	
+	//athletes page designing
+	static function athletes_page(){
+		
+		/*saving the form submitted data*/
+		if($_POST['athletes-page-selection-table-submit'] == 'Y'){
+			if(update_option('whiteboard_athlates_page', $_POST['athlete-page']));
+		}
+		
+		$athlates_page = get_option('whiteboard_athlates_page');
+		
+		$pages = self::get_pages();		
+		include ATHLATESWHITEBOARD_DIR . '/includes/options-page.php';
+	}
+	
+	//return all the pages
+	static function get_pages(){
+		global $wpdb;
+		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = 'page' AND post_status = 'publish'";
+		
+		return $wpdb->get_results($sql);
+	}
+	
 }

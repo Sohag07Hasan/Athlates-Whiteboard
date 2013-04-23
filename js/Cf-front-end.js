@@ -37,6 +37,8 @@ jQuery(document).ready(function($){
 			$(this).siblings().removeClass('selected-class');
 			$(this).addClass('selected-class');
 			
+			hide_ajax_showing_divs(post_id);
+			
 		});
 		
 		
@@ -65,9 +67,21 @@ jQuery(document).ready(function($){
 				toggleTableForm(form_id, table_id, 'hidden-entries');
 			});
 			
-												
+			hide_ajax_showing_divs(post_id);
+										
 		});
 		
+		
+		//it will hide the ajax showing divs
+		var hide_ajax_showing_divs = function(post_id){
+			//disabling ajax shwoing divs
+			$('div[post_id="'+post_id+'"]').filter('.ajax-showing-div').hide();
+			$('div[post_id="'+post_id+'"]').filter('.ajax-showing-div-actions').hide();	
+			
+			//ajax forms
+			$('form[post_id="'+post_id+'"]').filter('.ajax-email-verify-form').hide();
+			$('form[post_id="'+post_id+'"]').filter('.ajax-profile-info-editing-form').hide();
+		};
 		
 		/*
 		 *  when someone clicks more to show the athlates contribution
@@ -271,12 +285,16 @@ jQuery(document).ready(function($){
 									
 					var result = jQuery.parseJSON(result);
 					
+					if(result.is_error == true){
+						alert(result.message);
+						return false;
+					}
+					
 					//jQuery('#site-generator').html(result.data);		
 				
 					var new_tr = result.data;
 					table.find('tbody').append(new_tr);	
-					
-					
+									
 															
 				},					
 				

@@ -28,12 +28,6 @@ class Athlates_whiteboard_ajax_handling{
 		//athlete's directory
 		add_shortcode('athletes_directory', array(get_class(), 'athletes_directory'));
 		
-		
-		
-		//ajax actions to add a record
-		add_action('wp_ajax_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
-		add_action('wp_ajax_nopriv_athlates_records_submitted', array(get_class(), 'ajax_reuqest_parsing'));
-		
 	}
 	
 	
@@ -123,11 +117,7 @@ class Athlates_whiteboard_ajax_handling{
 		$athlate_name = $data['athlate']['name'];
 		$athlate_email = $data['athlate']['email'];
 		
-		$athlete_directory = self::get_athlete_directory_page_id();
-		
-		$url = get_permalink($athlete_directory);
-		
-		$athlete_url = add_query_arg('id', $user_id, $url);
+		$url = get_option('siteurl');
 		
 		$return = array();
 			
@@ -135,7 +125,7 @@ class Athlates_whiteboard_ajax_handling{
 		?>
 				
 		<dl class="athlates-profile-viewing">
-			<dt> <?php echo $athlate_name; ?> <a class="athlates-profile-link" href="<?php echo $athlete_url; ?>"> view profile </a> </dt>
+			<dt> <?php echo $athlate_name; ?> <a class="athlates-profile-link" href="<?php echo $url . '/athlates/?id=' . $user_id; ?>"> view profile </a> </dt>
 				<hr />
 				
 				<?php foreach($class_data['components'] as $key => $com) : ?>
@@ -322,12 +312,6 @@ class Athlates_whiteboard_ajax_handling{
 	}
 	
 	
-	//return the athletic directory page id
-	static function get_athlete_directory_page_id(){
-		return get_option('whiteboard_athlates_page');
-	}
-	
-	
 	/*
 	 * Showing an individual athlate
 	 * */
@@ -412,151 +396,6 @@ class Athlates_whiteboard_ajax_handling{
 		
 		
 	}
-	
-	
-	
-	//ajax request handling
-	static function ajax_reuqest_parsing(){
 		
-		
-		$data = $_POST['form_data'];
-			
-		if(is_array($data)){
-			$new_data = array();
-			foreach ($data as $key => $value){
-				$new_data[$value['name']] = $value['value'];
-			}
-		}
-		
-		
-		$post_id = $new_data['post_id'];
-		$class_name = $new_data['class_name'];
-		$name = $new_data['name'];
-		$email = $new_data['email'];
-			
-		//get the user id
-		$user_info = self::register_new_athlate($name, $email);
-		
-		if($user_info['is_exist']){
-			$return_array = array(
-				'is_error' => true,
-				'message' => 'This email is already in use'
-			);
-			
-			echo json_encode($return_array);
-			exit;
-		}
-		
-		//assigning the user id
-		$user_id = $user_info['id']; 
-		
-		if($user_id){
-			$board_data = get_post_meta($post_id, 'Athlates_White_Board', true);
-			foreach($board_data as $key => $data){
-				if($data['class'] == $class_name){
-					$sanitized_data = array();
-					foreach ($data['component'] as $d){
-						$sanitized_data[$d['name']]['result'] = $new_data['result['.$d['name'].']'];
-						$sanitized_data[$d['name']]['Rx'] = $new_data['Rx['.$d['name'].']'];
-						$sanitized_data[$d['name']]['RxScale'] = $new_data['RxScale['.$d['name'].']'];
-					}			
-				}
-			}
-			
-			
-			global $wpdb;
-			$tables = Athlatics_Board_Admin::get_tables();
-			extract($tables);
-	
-			$log_row = $wpdb->get_row("SELECT * FROM $user_meta WHERE post_id = '$post_id' AND user_id = '$user_id'");
-			
-		//	var_dump($log_row);
-			
-			$is_update = (empty($log_row)) ? false : true;
-			
-			$log = (empty($log_row->log)) ? array() : unserialize($log_row->log);
-			
-			//var_dump($log);
-						
-			$log[$class_name] = array(
-					'log_time' => current_time('timestamp'),
-					'components' => $sanitized_data
-				);
-				
-			//var_dump($log); die();
-				
-			if($is_update){
-				$success = $wpdb->update($user_meta, array('log'=>serialize($log), 'time'=>current_time('mysql')), array('user_id'=>$user_id, 'post_id'=>$post_id), array('%s', '%s'), array('%d', '%d'));
-			}
-			else{
-				$wpdb->insert($user_meta, array('user_id'=>$user_id, 'post_id'=>$post_id, 'time'=>current_time('mysql'), 'log'=>serialize($log)), array('%d', '%d', '%s', '%s'));
-				$success = $wpdb->insert_id;
-			}
-						
-			//now fetching the updated informations
-
-			$updated_data = $wpdb->get_row("SELECT * FROM $user_meta WHERE post_id = '$post_id' AND user_id = '$user_id'");
-			
-			$records = $wpdb->get_row("SELECT $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id WHERE $user_meta.post_id = '$post_id' AND $user.id = '$user_id'");
-			
-			if($records){
-				
-				$log_data = unserialize($records->log);
-				if(is_array($log_data)){
-					$class_data = $log_data[$class_name];
-					
-					foreach($board_data as $key => $data){
-						if($data['class'] == $class_name){
-							$sanitized_data = array();
-							$string = '<tr><td>'.$records->name.'</td>';
-							foreach ($data['component'] as $d){
-								
-								$Rx = (isset($class_data['components'][$d['name']]['Rx'])) ? 'Rx' : '';
-								
-								$string .= '<td>'.$class_data['components'][$d['name']]['result']. ' ' .$Rx.'</td>';
-								/*
-								$sanitized_data[$d['name']]['result'] = $new_data['result['.$d['name'].']'];
-								$sanitized_data[$d['name']]['Rx'] = $new_data['Rx['.$d['name'].']'];
-								$sanitized_data[$d['name']]['RxScale'] = $new_data['RxScale['.$d['name'].']'];
-								*/
-							}
-							$string .= '<td user_id=" ' . $user_id . ' " class="whiteboard-more"> > </td>';
-							$string .= '</tr>';			
-						}
-					}
-				}
-			}
-			
-		}
-		
-		$success_array = array(
-			'status' => $success,
-			'data' => $string
-		);
-		
-		echo json_encode($success_array);
-		
-		
-		exit;		
-			
-	}
-	
-	
-
-	//register new athlates
-	static function register_new_athlate($name, $email){
-		global $wpdb;
-		$tables = Athlatics_Board_Admin::get_tables();
-		extract($tables);
-		$email = trim($email);		
-		
-		$user_id = $wpdb->get_var("SELECT id FROM $user WHERE email = '$email'");
-		if($user_id) return array('is_exist'=>true, 'id'=>$user_id);		
-		
-		$wpdb->insert($user, array('name'=>$name, 'email'=>$email), array('%s', '%s'));		
-		return array('is_exist'=>false, 'id'=>$wpdb->insert_id);
-		
-	}
-	
 	
 }
