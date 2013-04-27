@@ -13,7 +13,7 @@
 				
 					<time class="date-time">
 						<div>
-							<?php echo date('d F Y') ?>
+							<?php echo date('d F Y', $time); ?>
 						</div>
 						<div>
 							<?php echo self::get_interval($current_time, $time); ?>

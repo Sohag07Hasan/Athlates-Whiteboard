@@ -1,8 +1,9 @@
 <?php 
 
 /*
- * plugin name: Athlates Whitebaord
+ * plugin name: Athletes Whitebaord
  * author: Mahibul Hasan
+ * description: This plugin will add whiteboard button in posts and pages and athletes can log their info 
  * */
 
 define("ATHLATESWHITEBOARD_DIR", dirname(__FILE__));

@@ -27,6 +27,7 @@ class Athlatics_Board_Admin{
 		//tiny mc
 		add_filter("mce_external_plugins", array(get_class(), "register_tinymce_plugin"));
 		add_filter('mce_buttons', array(get_class(), 'add_tinymce_button'));
+			
 		
 	}
 	
@@ -242,8 +243,70 @@ class Athlatics_Board_Admin{
 	
 	//admin menu
 	static function admin_menu(){
+		add_menu_page('athletes page', 'Athletes', 'manage_options', 'athlete-integration', array(get_class(), 'athletes_integration'));
 		add_options_page( 'athletes profile page', 'Athletes', 'manage_options', 'athletes_profile_info', array(get_class(), 'athletes_page'));
 	}
+	
+	
+	/*
+	 * admin page to manipulate athletes
+	 * */
+	static function athletes_integration(){
+				
+		$athletes_table = self::get_new_list_table();
+		
+		if($athletes_table->current_action() == 'delete'){
+			$athletes = $_REQUEST['athlete'];
+			if(is_array($athletes)){
+				$message = count($athletes) . ' deleted';				
+			}
+			
+			self::handle_actions($athletes);
+		}
+		
+		$athletes_table->prepare_items();
+		include ATHLATESWHITEBOARD_DIR . '/includes/athletes-list-table.php';
+	}
+	
+	
+	/*
+	 * handle actions
+	 * */
+	static function handle_actions($athletes){
+		global $wpdb;
+		$tables = self::get_tables();
+		extract($tables);
+		
+		$sql[] = "DELETE FROM $user WHERE id = '%s'";
+		$sql[] = "DELETE FROM $user_meta WHERE user_id = '%s'";
+		
+		if(is_array($athletes)){
+			foreach($athletes as $athlete){
+				foreach($sql as $s){
+					$wpdb->query($wpdb->prepare($s, $athlete));
+				}
+			}
+		}
+		else{
+			foreach($sql as $s){
+				$wpdb->query($wpdb->prepare($s, $athletes));
+			}
+		}
+	}
+	
+	
+	/*
+	 * return a new list table for athlates
+	 * */
+	static function get_new_list_table(){
+		if(!class_exists('Athletes_List_Table')){
+			include ATHLATESWHITEBOARD_DIR . '/classes/list-table.php';
+		}
+		
+		$list_table = new Athletes_List_Table();				
+		return $list_table;
+	}	
+	
 	
 	
 	//athletes page designing
