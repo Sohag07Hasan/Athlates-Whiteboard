@@ -66,7 +66,7 @@ class Athletes_List_Table extends  WP_List_Table{
 	 * total items
 	 * */
 	private function _set_pagination_parameters(){
-		$this->per_page = 2;
+		$this->per_page = 30;
 		$this->current_page = $this->get_pagenum();
 		
 		global $wpdb;
@@ -205,7 +205,7 @@ class Athletes_List_Table extends  WP_List_Table{
 		}
 		
 		$actions = array(
-			'edit' => sprintf('<a href="?page=%s&action=%s&athlete=%s">Edit</a>',$_REQUEST['page'],'edit',$item['ID']),
+			'edit' => sprintf('<a href="?page=%s&action=%s&athlete=%s">Edit</a>','athletes-register-add','edit',$item['ID']),
 			'delete' => "<a href='$delete_href'>Delete</a>"
 		);
 		

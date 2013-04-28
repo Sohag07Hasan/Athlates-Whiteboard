@@ -6,6 +6,8 @@ class Athlatics_Board_Admin{
 	
 	
 	static $ajax_requested = 0;
+	static $message = array();
+	
 
 	//hooks
 	static function init(){
@@ -28,7 +30,7 @@ class Athlatics_Board_Admin{
 		add_filter("mce_external_plugins", array(get_class(), "register_tinymce_plugin"));
 		add_filter('mce_buttons', array(get_class(), 'add_tinymce_button'));
 			
-		//add_action('init', array(get_class(), 'process_bulk_actions'));
+		add_action('init', array(get_class(), 'register_new_athlete'));
 	}
 	
 	
@@ -244,7 +246,8 @@ class Athlatics_Board_Admin{
 	//admin menu
 	static function admin_menu(){
 		add_menu_page('athletes page', 'Athletes', 'manage_options', 'athlete-integration', array(get_class(), 'athletes_integration'));
-		add_options_page( 'athletes profile page', 'Athletes', 'manage_options', 'athletes_profile_info', array(get_class(), 'athletes_page'));
+		add_submenu_page('athlete-integration', 'athlete register', 'Add New', 'manage_options', 'athletes-register-add', array(get_class(), 'athletes_register'));
+		add_submenu_page('athlete-integration', 'athlates directory', 'A. Directory', 'manage_options', 'athletes-directory', array(get_class(), 'athletes_page'));
 	}
 	
 	
@@ -267,21 +270,6 @@ class Athlatics_Board_Admin{
 	
 		$athletes_table->prepare_items();
 		include ATHLATESWHITEBOARD_DIR . '/includes/athletes-list-table.php';
-	}
-	
-	
-	/*
-	 * processing bulk actions
-	 **/ 
-	static function process_bulk_actions(){
-		
-		$athletes_table = self::get_new_list_table();
-			
-		if($athletes_table->current_action() == 'delete'){
-			$athletes = $_REQUEST['athlete'];
-			return self::handle_actions($athletes);
-		}
-				
 	}
 	
 	
@@ -330,6 +318,109 @@ class Athlatics_Board_Admin{
 		return $list_table;
 	}	
 	
+	
+	/*
+	 * submenu page to register or add new athletes or edit the exisitng one
+	 * */
+	static function athletes_register(){
+				
+		if($_REQUEST['type'] == 'editlog'){
+			include ATHLATESWHITEBOARD_DIR . '/includes/edit-workouts.php';
+		}
+		else{
+			include ATHLATESWHITEBOARD_DIR . '/includes/edit-athlete.php';
+		}
+	}
+	
+	
+	/*
+	 * register new athlete
+	 * */
+	static function register_new_athlete(){
+		if($_POST['action'] == 'edit-athlete'){
+			
+			$is_error = false;
+			
+			if(empty($_POST['athlete_name'])){
+				self::$message['registration']['error'][] = 'Name: name field should not be empty';
+				$is_error = true;
+			}
+			
+			if(!is_email($_POST['athlete_email'])){
+				self::$message['registration']['error'][] = "Email: invalid Email";
+				$is_error = true;
+			}
+			
+			if($is_error){
+				return;
+			}
+			else{
+				$athlete = self::register_new_athlate($_POST['athlete_name'], $_POST['athlete_email']);
+				$url = admin_url('admin.php?page=athletes-register-add');
+				if($athlete['is_exist']){
+					$url = add_query_arg(array('is_exist'=>1), $url);
+				}
+				
+				$url = add_query_arg(array('athlete'=>$athlete['id'], 'message'=>1), $url);
+				
+				if(!function_exists('wp_redirect')){
+					include ABSPATH . '/wp-includes/pluggable.php';
+				}
+				
+				wp_redirect($url);
+				exit;
+			}		
+			
+		}
+	}
+	
+	
+	
+	/*get whiteboard containing posts*/
+	static function get_whiteboard_posts(){
+		global $wpdb;
+		$sql = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type = 'post' AND post_status = 'publish' AND ID in (
+			SELECT post_id FROM $wpdb->postmeta WHERE meta_key LIKE 'Athlates_White_Board'
+		) ORDER BY post_title ASC";
+		
+		return $wpdb->get_results($sql);
+	}
+	
+	
+	
+	/*
+	 * get an athlete and it's  inforamtion
+	 * */
+	static function get_an_athlete($id){
+		global $wpdb;
+		$tables = Athlatics_Board_Admin::get_tables();
+		extract($tables);
+		
+		$athlete = $wpdb->get_row("SELECT * FROM $user WHERE id = '$id'");
+		$logged_posts = $wpdb->get_col("SELECT post_id FROM $user_meta WHERE user_id = '$id'");
+		
+		return array(
+			'athlete' => $athlete,
+			'posts' => $logged_posts
+		);
+			
+	}
+	
+	
+	//register new athlates
+	static function register_new_athlate($name, $email){
+		global $wpdb;
+		$tables = Athlatics_Board_Admin::get_tables();
+		extract($tables);
+		$email = trim($email);		
+		
+		$user_id = $wpdb->get_var("SELECT id FROM $user WHERE email = '$email'");
+		if($user_id) return array('is_exist'=>true, 'id'=>$user_id);		
+		
+		$wpdb->insert($user, array('name'=>$name, 'email'=>$email), array('%s', '%s'));		
+		return array('is_exist'=>false, 'id'=>$wpdb->insert_id);
+		
+	}
 	
 	
 	//athletes page designing
