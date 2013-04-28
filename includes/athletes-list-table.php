@@ -10,11 +10,19 @@
 			
 			<?php 
 		}
+		
+		$action = admin_url('?page=athlete-integration');
+		if($athletes_table->get_pagenum()){
+			$action = add_query_arg(array('paged'=>$athletes_table->get_pagenum()), $action);
+		}		
 	?>
 	
-	<form method="post" action="<?php echo admin_url('?page=athlete-integration'); ?>">
+	
+	
+	<form method="post" action="<?php echo $action; ?>">
 		<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
-		<?php			
+		<?php
+			echo $athletes_table->search_box('search', 'athlete');		
 			$athletes_table->display();
 		?>
 	

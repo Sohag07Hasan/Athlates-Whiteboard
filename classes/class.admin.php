@@ -28,7 +28,7 @@ class Athlatics_Board_Admin{
 		add_filter("mce_external_plugins", array(get_class(), "register_tinymce_plugin"));
 		add_filter('mce_buttons', array(get_class(), 'add_tinymce_button'));
 			
-		
+		//add_action('init', array(get_class(), 'process_bulk_actions'));
 	}
 	
 	
@@ -255,6 +255,7 @@ class Athlatics_Board_Admin{
 				
 		$athletes_table = self::get_new_list_table();
 		
+		
 		if($athletes_table->current_action() == 'delete'){
 			$athletes = $_REQUEST['athlete'];
 			if(is_array($athletes)){
@@ -263,9 +264,24 @@ class Athlatics_Board_Admin{
 			
 			self::handle_actions($athletes);
 		}
-		
+	
 		$athletes_table->prepare_items();
 		include ATHLATESWHITEBOARD_DIR . '/includes/athletes-list-table.php';
+	}
+	
+	
+	/*
+	 * processing bulk actions
+	 **/ 
+	static function process_bulk_actions(){
+		
+		$athletes_table = self::get_new_list_table();
+			
+		if($athletes_table->current_action() == 'delete'){
+			$athletes = $_REQUEST['athlete'];
+			return self::handle_actions($athletes);
+		}
+				
 	}
 	
 	
@@ -280,18 +296,25 @@ class Athlatics_Board_Admin{
 		$sql[] = "DELETE FROM $user WHERE id = '%s'";
 		$sql[] = "DELETE FROM $user_meta WHERE user_id = '%s'";
 		
+		if(!function_exists('wp_redirect')){
+			include ABSPATH . '/wp-includes/pluggable.php';
+		}
+			
+		
 		if(is_array($athletes)){
 			foreach($athletes as $athlete){
 				foreach($sql as $s){
 					$wpdb->query($wpdb->prepare($s, $athlete));
 				}
 			}
+											
 		}
 		else{
 			foreach($sql as $s){
 				$wpdb->query($wpdb->prepare($s, $athletes));
 			}
 		}
+			
 	}
 	
 	
