@@ -325,10 +325,65 @@ class Athlatics_Board_Admin{
 	static function athletes_register(){
 				
 		if($_REQUEST['type'] == 'editlog'){
-			include ATHLATESWHITEBOARD_DIR . '/includes/edit-workouts.php';
+			if($_POST['fetch-log'] == 'Y' && $_REQUEST['phase'] == 2){
+							
+				if($_POST['athlete-log-by-admin-saved'] == 'Y'){						
+					self::update_athlete_log_by_admin();					
+				}
+				
+				
+				include ATHLATESWHITEBOARD_DIR . '/includes/edit-workouts-phase2.php';
+			}
+			
+			else{
+				include ATHLATESWHITEBOARD_DIR . '/includes/edit-workouts.php';
+			}
 		}
 		else{
 			include ATHLATESWHITEBOARD_DIR . '/includes/edit-athlete.php';
+		}
+	}
+	
+	
+	//athlete logs updated by admin
+	static function update_athlete_log_by_admin(){
+		
+		global $wpdb;
+		$tables = Athlatics_Board_Admin::get_tables();
+		extract($tables);
+		$time = current_time('timestamp');
+		
+		$athlete_id = $_POST['athlete'];
+		$post_id = $_POST['wod-post-number'];
+		
+		$sanitized = array();		
+		if(is_array($_POST['class'])){
+			foreach($_POST['class'] as $class_name => $class){
+				
+				$components = array();
+				
+				foreach($class['components'] as $com => $details){
+					if(empty($details['result']) && empty($details['Rx']) && empty($details['RxScale'])) continue;
+					$components[$com] = $details;
+				}
+				
+				if(empty($components)) continue;
+				
+				$sanitized[$class_name] = array(
+					'log_time' => $time,
+					'components' => $components
+				);
+			}
+		}
+		
+		if($sanitized){
+			$is_update = $wpdb->get_row("SELECT * FROM $user_meta WHERE user_id = '$athlete_id' AND post_id = '$post_id'");
+			if($is_update){
+				$wpdb->update($user_meta, array('time'=>current_time('mysql'), 'log'=>serialize($sanitized)), array('user_id'=>$athlete_id, 'post_id'=>$post_id), array('%s', '%s'), array('%d', '%d'));
+			}
+			else{
+				$wpdb->insert($user_meta, array('user_id'=>$athlete_id, 'post_id'=>$post_id, 'time'=>current_time('mysql'), 'log'=>serialize($sanitized)), array('%d', '%d', '%s', '%s'));
+			}
 		}
 	}
 	

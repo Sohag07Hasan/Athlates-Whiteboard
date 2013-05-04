@@ -15,7 +15,9 @@
 		$logged_posts = $athlete['posts'];
 	}
 	
-
+	
+	$action = admin_url('admin.php?page=athletes-register-add&type=editlog&phase=2&athlete='.$_REQUEST['athlete']);
+	
 ?>
 
 
@@ -29,6 +31,10 @@
 		font-size: 15px;
 	}
 	
+	.available{
+		color: green;
+	}
+	
 </style>
 
 <div class="wrap">
@@ -37,7 +43,12 @@
 	
 	<p class="instructions">Green colored posts alreay have workouts form this athlete</p>
 	
-	<form action="" method="post">
+	<form action="<?php echo $action; ?>" method="post">
+	
+		<input type="hidden" name="athlete" value="<?php echo $_REQUEST['athlete']; ?>" />
+				
+		<input type="hidden" name="fetch-log" value="Y" />
+		
 		<table class="form-table">
 			<tbody>
 			
@@ -50,7 +61,7 @@
 					<th scope="row">Athlete's Email</th>
 					<td><?php echo $email; ?></td>
 				</tr>
-				
+								
 				<tr>
 					<th scope="row">Select a post </th>
 					<td>
