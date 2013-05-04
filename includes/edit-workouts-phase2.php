@@ -1,32 +1,5 @@
 <?php 
-	/*
-	if($_POST['athlete-log-by-admin-saved']){
-				
-		$sanitized = array();		
-		if(is_array($_POST['class'])){
-			foreach($_POST['class'] as $class_name => $class){
-				
-				$components = array();
-				
-				foreach($class['components'] as $com => $details){
-					if(empty($details['result']) && empty($details['Rx']) && empty($details['RxScale'])) continue;
-					$components[$com] = $details;
-				}
-				
-				if(empty($components)) continue;
-				
-				$sanitized[$class_name] = array(
-					'log_time' => current_time('timestamp'),
-					'components' => $components
-				);
-			}
-		}
-		
-		if($sanitized){
-			
-		}
-	}
-	*/
+	
 
 	$athlete = self::get_an_athlete($_POST['athlete']);
 	if(isset($athlete['athlete'])){

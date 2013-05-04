@@ -288,35 +288,77 @@ class Athlates_whiteboard_ajax_handling{
 		//doing some pagination
 		$total_athlete = (int) $wpdb->get_var("SELECT COUNT(id) FROM $user");
 		$per_page = 30;		
-		$total_page = ceil($total_athlete/$per_page);
+		$total_page = ceil($total_athlete/$per_page);	
+
+		$cur_page = 1;
 		
+		if(isset($_GET['page'])){
+			$cur_page = $_GET['page'];
+		}
+		else{
+			
+			$url = trim($_SERVER['REQUEST_URI'], '/');
+			
+			if(preg_match('/page/', $url, $match)){
+				$url = explode('/', $url);			
+				$cur_page = end($url);
+			}			
+		}
 		
-		$cur_page = ($_GET['ap'] > 0) ? $_GET['ap'] : 0;
-		$offset = (int) $per_page * $cur_page;
+		//var_dump($cur_page);
 		
-		$sql = "SELECT $user_meta.post_id, $user_meta.user_id, $user_meta.log, $user.name FROM $user_meta INNER JOIN $user ON $user_meta.user_id = $user.id ORDER BY $user.name LIMIT $per_page OFFSET $offset";
-				
-		//var_dump($sql);
-		$raw_athlates = $wpdb->get_results($sql);
+		//$cur_page = ($_GET['ap'] > 0) ? $_GET['ap'] : 0;
+		
+		$offset = (int) $per_page * ($cur_page-1);
+		
+		//$offset = 0;
+		
+		$permalinks = get_option('permalink_structure');
+        $format = empty( $permalinks ) ? '&page=%#%' : 'page/%#%/';
+        		
+		$args = array(
+			'base' => get_pagenum_link(1) . '%_%',
+			'format' => $format,
+			'total' => (int) $total_page,
+			'current' => (int)$cur_page,
+			
+		);
+		
+		$athletes = $wpdb->get_results("SELECT * FROM $user ORDER BY name LIMIT $per_page OFFSET $offset");
+		//var_dump($athletes);
+		
 		$athlates = array();
-		
-		if($raw_athlates){
-			foreach($raw_athlates as $rath){
-				$log = unserialize($rath->log);
-				$athlates[$rath->user_id]['name'] = $rath->name;				
-				foreach($log as $cn => $value){
-					$athlates[$rath->user_id]['time'][] = $value['log_time'];
-					$athlates[$rath->user_id]['classes'][$cn] = $value;					
+		foreach($athletes as $a){
+			$raw_datas = $wpdb->get_results("SELECT post_id, log FROM $user_meta WHERE user_id = '$a->id'");
+			if($raw_datas){
+				foreach($raw_datas as $raw_data){
+					$log = unserialize($raw_data->log);
+					$athlates[$a->id]['name'] = $a->name;
+
+					if($log){
+						foreach($log as $cn => $value){
+							$athlates[$a->id]['time'][] = $value['log_time'];
+							$athlates[$a->id]['classes'][$cn] = $value;					
+						}
+					}
+										
 				}
-								
+			}
+			else{
+				$athlates[$a->id]['name'] = $a->name;
+				$athlates[$a->id]['time'] = array();
+				$athlates[$a->id]['classes'] = array();
 			}
 		}
 		
+		//var_dump($athlates);
+			
 		
 		ob_start();
 		include ATHLATESWHITEBOARD_DIR . '/includes/athletes-directory.php';
 		$content = ob_get_contents();	
 		ob_end_clean();
+		
 		
 		return $content;
 	}

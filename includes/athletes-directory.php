@@ -25,7 +25,16 @@
 							<tr class="<?php echo $tr_class; ?>">
 								<td><a title="<?php echo $athlate['name']; ?>" href="<?php echo $directory ?>"><?php echo $athlate['name']; ?></a></td>
 								<td><?php echo count($athlate['classes']); ?> Workouts Logged</td>
-								<td><?php echo self::get_interval($now, max($athlate['time'])); ?></td>
+								<td>
+									<?php 
+										if(count($athlate['time']) > 0){									
+											echo self::get_interval($now, max($athlate['time'])); 
+										}
+										else{
+											echo 'N/A';
+										}
+									?>
+								</td>
 							</tr>
 							
 						<?php 
@@ -35,20 +44,10 @@
 			
 		</table>
 				
-		<ul class="athletes-pagination">
-			<?php 
-				for($i = 0; $i < $total_page; $i++){
-					$j = $i + 1;
-					$ap_link = add_query_arg('ap', $i, $link);
-					$active_class = ($cur_page == $i) ? 'active' : '';
-					?>
-					<li class="<?php echo $active_class; ?>"> <a href="<?php echo $ap_link; ?>"> <?php echo $j; ?> </a> </li>
-					<?php 
-				}
-			?>		
-		</ul>
-		
 		<?php 
+			
+		
+		echo paginate_links($args);
 		
 	}
 ?>
