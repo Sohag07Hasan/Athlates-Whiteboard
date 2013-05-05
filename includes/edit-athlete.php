@@ -32,15 +32,14 @@
 				//edit url
 				$edit_url = admin_url('admin.php?page=athletes-register-add&type=editlog&athlete=' . $athlete['athlete']->id);
 			}
-			
-			/*
-			$posts = self::get_whiteboard_posts();
-			$logged_posts = array();
-
-			if(count($athlete['posts']) > 0){
-				$logged_posts = $athlete['posts'];
-			}
-			*/
+						
+		}
+		
+		
+		if(isset($_POST['athlete_id'])){
+			?>
+			<div class="updated"><p>Profile updated</p></div>
+			<?php 
 		}
 		
 		
@@ -80,7 +79,11 @@
 			</tbody>
 		</table>
 		
-		<p><input type="submit" class="button button-primary" value="Add New Athlate" /></p>
+		<?php if(isset($_REQUEST['athlete'])) : ?>
+			<p><input type="submit" class="button button-primary" value="Update Athlate" /></p>
+		<?php else:  ?>		
+			<p><input type="submit" class="button button-primary" value="Add New Athlate" /></p>
+		<?php endif; ?>
 		
 	</form>	
 	

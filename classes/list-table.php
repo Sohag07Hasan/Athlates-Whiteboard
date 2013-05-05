@@ -205,6 +205,7 @@ class Athletes_List_Table extends  WP_List_Table{
 		}
 		
 		$actions = array(
+			'wod' => sprintf('<a href="?page=%s&type=%s&athlete=%s">Wod</a>','athletes-register-add','editlog',$item['ID']),
 			'edit' => sprintf('<a href="?page=%s&action=%s&athlete=%s">Edit</a>','athletes-register-add','edit',$item['ID']),
 			'delete' => "<a href='$delete_href'>Delete</a>"
 		);

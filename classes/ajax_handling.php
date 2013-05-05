@@ -287,7 +287,7 @@ class Athlates_whiteboard_ajax_handling{
 
 		//doing some pagination
 		$total_athlete = (int) $wpdb->get_var("SELECT COUNT(id) FROM $user");
-		$per_page = 30;		
+		$per_page = 20;		
 		$total_page = ceil($total_athlete/$per_page);	
 
 		$cur_page = 1;

@@ -409,6 +409,9 @@ class Athlatics_Board_Admin{
 			if($is_error){
 				return;
 			}
+			elseif(isset($_POST['athlete_id'])){
+				return self::update_athlete_profile($_POST['athlete_id']);		
+			}
 			else{
 				$athlete = self::register_new_athlate($_POST['athlete_name'], $_POST['athlete_email']);
 				$url = admin_url('admin.php?page=athletes-register-add');
@@ -427,6 +430,18 @@ class Athlatics_Board_Admin{
 			}		
 			
 		}
+	}
+	
+	
+	/*
+	 * update Athlete profile
+	 * */
+	static function update_athlete_profile(){
+		global $wpdb;
+		$tables = Athlatics_Board_Admin::get_tables();
+		extract($tables);
+		
+		$wpdb->update($user, array('name'=>$_POST['athlete_name'], 'email'=>$_POST['athlete_email']), array('id'=>$_POST['athlete_id']), array('%s', '%s'), array('%d'));
 	}
 	
 	
