@@ -497,7 +497,7 @@ class Athlates_whiteboard_ajax_handling{
 		}
 			
 		//get the user id
-		$user_info = self::register_new_athlate($name, $email);
+		$user_info = self::register_new_athlate($name, $email, $class_name, $post_id);
 		
 		if($user_info['is_exist']){
 			$return_array = array(
@@ -606,14 +606,28 @@ class Athlates_whiteboard_ajax_handling{
 	
 
 	//register new athlates
-	static function register_new_athlate($name, $email){
+	static function register_new_athlate($name, $email, $class_name, $post_id){
 		global $wpdb;
 		$tables = Athlatics_Board_Admin::get_tables();
 		extract($tables);
 		$email = trim($email);		
 		
 		$user_id = $wpdb->get_var("SELECT id FROM $user WHERE email = '$email'");
-		if($user_id) return array('is_exist'=>true, 'id'=>$user_id);		
+		
+		if($user_id){
+			$log = $wpdb->get_var("SELECT log FROM $user_meta WHERE user_id = '$user_id' AND post_id = '$post_id'");
+			
+			if($log){
+				$log = unserialize($log);
+				if(isset($log[$class_name])){
+					return array('is_exist'=>true, 'id'=>$user_id);
+				}
+			}
+		}
+
+		if($user_id){
+			return array('is_exist'=>false, 'id'=>$user_id);	
+		}
 		
 		$wpdb->insert($user, array('name'=>$name, 'email'=>$email), array('%s', '%s'));		
 		return array('is_exist'=>false, 'id'=>$wpdb->insert_id);
