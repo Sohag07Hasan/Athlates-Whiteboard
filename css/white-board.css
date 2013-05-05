@@ -57,6 +57,7 @@ div.athlates-white-board{
 	height: 20px;
     width: 305px;
     float: right;
+    margin-right: 60px;
 }
 
 .whiteboard-window table{
